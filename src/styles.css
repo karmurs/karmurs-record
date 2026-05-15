@@ -260,7 +260,7 @@ button {
   text-align: left;
 }
 
-.discovery-link span {
+.discovery-title {
   color: #fff7ea;
   display: block;
   font-size: 1.25rem;
@@ -269,8 +269,10 @@ button {
 }
 
 .discovery-copy {
+  color: rgba(246, 239, 227, 0.72);
   display: block;
   font-size: 0.95rem;
+  font-weight: 400;
   line-height: 1.7;
   margin: 0;
 }

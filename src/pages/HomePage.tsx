@@ -41,7 +41,7 @@ export default function HomePage({ onNavigate }: HomePageProps) {
               onClick={() => onNavigate({ name: 'section', section: item.section })}
               type="button"
             >
-              <span>{item.title}</span>
+              <span className="discovery-title">{item.title}</span>
               <span className="discovery-copy">{item.text}</span>
             </button>
           ))}
