@@ -44,4 +44,27 @@ describe('Karmurs Record homepage', () => {
     await user.click(screen.getByRole('button', { name: /사이트 이름을 정한 날/i }));
     expect(screen.getByText(/흘려보내기 아까운 것들을 모아두는 공간/)).toBeInTheDocument();
   });
+
+  it('opens the archive as an aggregate record list from quick navigation', async () => {
+    const user = userEvent.setup();
+    render(<App />);
+
+    const quickNav = screen.getByRole('navigation', { name: 'Quick record navigation' });
+    await user.click(within(quickNav).getByRole('button', { name: '기록함' }));
+
+    expect(screen.getByRole('heading', { name: 'Archive' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /사이트 이름을 정한 날/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /첫 무드 보드/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Racing 섹션 자리 잡기/i })).toBeInTheDocument();
+  });
+
+  it('opens a real record from the random discovery prompt', async () => {
+    const user = userEvent.setup();
+    render(<App />);
+
+    await user.click(screen.getByRole('button', { name: /random/i }));
+
+    expect(screen.getByRole('heading', { name: '첫 무드 보드' })).toBeInTheDocument();
+    expect(screen.getByText(/다크 에디토리얼과 손글씨 타이틀/)).toBeInTheDocument();
+  });
 });

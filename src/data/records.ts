@@ -89,6 +89,12 @@ export function getRecordsByType(type: RecordType) {
   return records.filter((record) => record.type === type && record.visibility === 'link');
 }
 
+export function getPublicRecords() {
+  return [...records]
+    .filter((record) => record.visibility === 'link')
+    .sort((a, b) => b.date.localeCompare(a.date) || b.createdAt.localeCompare(a.createdAt));
+}
+
 export function getRecordById(id: string) {
   return records.find((record) => record.id === id && record.visibility === 'link');
 }

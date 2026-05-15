@@ -1,7 +1,12 @@
 import type { View } from '../App';
 import RecordCard from '../components/RecordCard';
 import SiteShell from '../components/SiteShell';
-import { getRecordsByType, primarySections, type RecordType } from '../data/records';
+import {
+  getPublicRecords,
+  getRecordsByType,
+  primarySections,
+  type RecordType
+} from '../data/records';
 
 const sectionCopy: Record<RecordType, { title: string; description: string }> = {
   journal: {
@@ -37,7 +42,7 @@ type SectionPageProps = {
 
 export default function SectionPage({ onNavigate, section }: SectionPageProps) {
   const sectionInfo = sectionCopy[section];
-  const records = getRecordsByType(section);
+  const records = section === 'archive' ? getPublicRecords() : getRecordsByType(section);
   const primarySection = primarySections.find((item) => item.id === section);
 
   return (
