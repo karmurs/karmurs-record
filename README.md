@@ -2,6 +2,8 @@
 
 Personal homepage and record archive.
 
+Planned public URL: `https://kams227-cyber.github.io/karmurs-record/`
+
 ## Direction
 
 Dark editorial personal site with a free handwritten hero phrase and three primary entry cards:
