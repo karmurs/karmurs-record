@@ -26,6 +26,10 @@ npm test
 npm run build
 ```
 
+## Deployment
+
+See `docs/deploy.md`.
+
 ## Content
 
 Initial content lives in `src/data/records.ts`.
