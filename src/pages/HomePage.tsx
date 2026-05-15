@@ -42,7 +42,7 @@ export default function HomePage({ onNavigate }: HomePageProps) {
               type="button"
             >
               <span>{item.title}</span>
-              <p>{item.text}</p>
+              <span className="discovery-copy">{item.text}</span>
             </button>
           ))}
         </section>

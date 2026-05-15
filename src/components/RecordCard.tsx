@@ -15,7 +15,7 @@ export default function RecordCard({ onNavigate, record }: RecordCardProps) {
     >
       <time dateTime={record.date}>{record.date}</time>
       <strong>{record.title}</strong>
-      <p>{record.summary}</p>
+      <span className="record-card-summary">{record.summary}</span>
     </button>
   );
 }

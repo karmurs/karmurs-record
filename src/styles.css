@@ -268,7 +268,8 @@ button {
   margin-bottom: 12px;
 }
 
-.discovery-link p {
+.discovery-copy {
+  display: block;
   font-size: 0.95rem;
   line-height: 1.7;
   margin: 0;
@@ -397,13 +398,14 @@ button {
   line-height: 1.05;
 }
 
-.record-card p {
+.record-card-summary {
   color: rgba(23, 17, 11, 0.68);
+  display: block;
   line-height: 1.6;
   margin: 0;
 }
 
-.record-card-racing p {
+.record-card-racing .record-card-summary {
   color: rgba(255, 247, 234, 0.78);
 }
 
