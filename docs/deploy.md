@@ -5,8 +5,9 @@ Karmurs' Record is a static Vite site. Build output is written to `dist/` and ca
 Planned GitHub repository:
 
 - Owner: `kams227-cyber`
+- Owner: `karmurs`
 - Repository: `karmurs-record`
-- Public URL: `https://kams227-cyber.github.io/karmurs-record/`
+- Public URL: `https://karmurs.github.io/karmurs-record/`
 
 ## Quick Check
 
@@ -20,7 +21,7 @@ Open the preview URL and confirm the homepage, section cards, archive, and detai
 
 ## GitHub Pages
 
-1. Create a GitHub repository named `karmurs-record` under `kams227-cyber`.
+1. Create a GitHub repository named `karmurs-record` under `karmurs`.
 2. Push this project to the repository.
 3. In GitHub, open `Settings > Pages`.
 4. Set the source to `GitHub Actions`.

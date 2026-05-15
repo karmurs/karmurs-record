@@ -2,7 +2,7 @@
 
 Personal homepage and record archive.
 
-Planned public URL: `https://kams227-cyber.github.io/karmurs-record/`
+Planned public URL: `https://karmurs.github.io/karmurs-record/`
 
 ## Direction
 
