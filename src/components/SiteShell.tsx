@@ -1,35 +1,41 @@
 import type { ReactNode } from 'react';
+import type { View } from '../App';
 
 const topNavItems = [
-  { label: 'HOME', href: '#home' },
-  { label: 'JOURNAL', href: '#journal' },
-  { label: 'GALLERY', href: '#gallery' },
-  { label: 'RACING', href: '#racing' }
-];
+  { label: 'HOME', view: { name: 'home' } },
+  { label: 'JOURNAL', view: { name: 'section', section: 'journal' } },
+  { label: 'GALLERY', view: { name: 'section', section: 'gallery' } },
+  { label: 'RACING', view: { name: 'section', section: 'racing' } }
+] satisfies { label: string; view: View }[];
 
 const floatingNavItems = [
-  { label: '오늘', href: '#today' },
-  { label: '사진', href: '#gallery' },
-  { label: '레이싱', href: '#racing' },
-  { label: '기록함', href: '#timeline' }
-];
+  { label: '오늘', view: { name: 'section', section: 'journal' } },
+  { label: '사진', view: { name: 'section', section: 'gallery' } },
+  { label: '레이싱', view: { name: 'section', section: 'racing' } },
+  { label: '기록함', view: { name: 'section', section: 'archive' } }
+] satisfies { label: string; view: View }[];
 
 type SiteShellProps = {
   children: ReactNode;
+  onNavigate: (view: View) => void;
 };
 
-export default function SiteShell({ children }: SiteShellProps) {
+export default function SiteShell({ children, onNavigate }: SiteShellProps) {
   return (
     <div className="site-shell" id="home">
       <header className="site-header" aria-label="Primary">
-        <a className="brand" href="#home">
+        <button
+          className="brand button-reset"
+          onClick={() => onNavigate({ name: 'home' })}
+          type="button"
+        >
           Karmurs' Record
-        </a>
+        </button>
         <nav className="top-nav" aria-label="Main sections">
           {topNavItems.map((item) => (
-            <a key={item.href} href={item.href}>
+            <button key={item.label} onClick={() => onNavigate(item.view)} type="button">
               {item.label}
-            </a>
+            </button>
           ))}
         </nav>
       </header>
@@ -38,9 +44,9 @@ export default function SiteShell({ children }: SiteShellProps) {
 
       <nav className="floating-nav" aria-label="Quick record navigation">
         {floatingNavItems.map((item) => (
-          <a key={item.href} href={item.href}>
+          <button key={item.label} onClick={() => onNavigate(item.view)} type="button">
             {item.label}
-          </a>
+          </button>
         ))}
       </nav>
     </div>

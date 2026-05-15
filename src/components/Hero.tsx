@@ -1,6 +1,11 @@
+import type { View } from '../App';
 import { primarySections } from '../data/records';
 
-export default function Hero() {
+type HeroProps = {
+  onNavigate: (view: View) => void;
+};
+
+export default function Hero({ onNavigate }: HeroProps) {
   return (
     <section className="hero" aria-labelledby="hero-title">
       <div className="hero-copy">
@@ -16,16 +21,16 @@ export default function Hero() {
 
       <nav className="primary-card-grid" aria-label="Primary record sections">
         {primarySections.map((section) => (
-          <a
+          <button
             className={`primary-card primary-card-${section.id}`}
-            href={`#${section.id}`}
-            id={section.id}
             key={section.id}
+            onClick={() => onNavigate({ name: 'section', section: section.id })}
+            type="button"
           >
             <span className="card-eyebrow">{section.eyebrow}</span>
             <strong>{section.title}</strong>
             <span>{section.label}</span>
-          </a>
+          </button>
         ))}
       </nav>
     </section>
