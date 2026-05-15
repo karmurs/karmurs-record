@@ -15,6 +15,18 @@ html {
   scroll-behavior: smooth;
 }
 
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+  }
+}
+
 body {
   min-width: 320px;
   margin: 0;
@@ -95,9 +107,17 @@ a {
   max-width: 720px;
 }
 
-.hero-kicker,
-.card-eyebrow {
+.hero-kicker {
   color: #b98d5d;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.card-eyebrow {
+  color: rgba(23, 17, 11, 0.86);
   font-size: 0.78rem;
   font-weight: 800;
   letter-spacing: 0.08em;
@@ -114,6 +134,11 @@ a {
   line-height: 0.78;
   margin: 24px 0 30px;
   max-width: 820px;
+  overflow-wrap: anywhere;
+}
+
+.script-title span {
+  max-width: 100%;
 }
 
 .script-title span:last-child {
@@ -179,12 +204,16 @@ a {
 }
 
 .primary-card-racing {
-  background: #9f7043;
+  background: #965f34;
   color: #fff7ea;
 }
 
 .primary-card-racing > span:last-child {
-  color: rgba(255, 247, 234, 0.76);
+  color: #fff7ea;
+}
+
+.primary-card-racing .card-eyebrow {
+  color: #fffdf7;
 }
 
 .primary-card-racing::after {
@@ -287,7 +316,17 @@ a {
   }
 
   .script-title {
-    font-size: 4rem;
+    font-size: clamp(3rem, 18vw, 4rem);
+    max-width: calc(100vw - 32px);
+  }
+
+  .script-title span:first-child {
+    max-width: 9ch;
+  }
+
+  .script-title span:last-child {
+    margin-left: 22px;
+    max-width: 9ch;
   }
 
   .hero-description {

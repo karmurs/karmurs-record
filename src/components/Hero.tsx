@@ -14,7 +14,7 @@ export default function Hero() {
         </p>
       </div>
 
-      <div className="primary-card-grid" aria-label="Primary record sections">
+      <nav className="primary-card-grid" aria-label="Primary record sections">
         {primarySections.map((section) => (
           <a
             className={`primary-card primary-card-${section.id}`}
@@ -27,7 +27,7 @@ export default function Hero() {
             <span>{section.label}</span>
           </a>
         ))}
-      </div>
+      </nav>
     </section>
   );
 }
