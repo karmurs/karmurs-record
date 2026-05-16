@@ -50,11 +50,26 @@ type SectionPageProps = {
 
 export default function SectionPage({ onNavigate, section }: SectionPageProps) {
   const [archiveFilter, setArchiveFilter] = useState<ArchiveFilter>('all');
+  const [archiveQuery, setArchiveQuery] = useState('');
   const sectionInfo = sectionCopy[section];
   const archiveRecords = getPublicRecords();
+  const normalizedQuery = archiveQuery.trim().toLocaleLowerCase();
   const records =
     section === 'archive'
-      ? archiveRecords.filter((record) => archiveFilter === 'all' || record.type === archiveFilter)
+      ? archiveRecords.filter((record) => {
+          const matchesFilter = archiveFilter === 'all' || record.type === archiveFilter;
+          const searchableText = [
+            record.title,
+            record.summary,
+            record.body,
+            record.type,
+            ...record.tags
+          ]
+            .join(' ')
+            .toLocaleLowerCase();
+
+          return matchesFilter && (!normalizedQuery || searchableText.includes(normalizedQuery));
+        })
       : getRecordsByType(section);
   const primarySection = primarySections.find((item) => item.id === section);
   const archiveFilterOptions = [
@@ -86,19 +101,30 @@ export default function SectionPage({ onNavigate, section }: SectionPageProps) {
         </section>
 
         {section === 'archive' ? (
-          <div className="archive-filter" aria-label="Archive filters" role="group">
-            {archiveFilterOptions.map((option) => (
-              <button
-                aria-pressed={archiveFilter === option.id}
-                className="filter-chip"
-                key={option.id}
-                onClick={() => setArchiveFilter(option.id)}
-                type="button"
-              >
-                <span>{option.label}</span>
-                <small>{option.count}</small>
-              </button>
-            ))}
+          <div className="archive-tools">
+            <label className="archive-search">
+              <span>Search archive</span>
+              <input
+                onChange={(event) => setArchiveQuery(event.target.value)}
+                placeholder="title, tag, note..."
+                type="search"
+                value={archiveQuery}
+              />
+            </label>
+            <div className="archive-filter" aria-label="Archive filters" role="group">
+              {archiveFilterOptions.map((option) => (
+                <button
+                  aria-pressed={archiveFilter === option.id}
+                  className="filter-chip"
+                  key={option.id}
+                  onClick={() => setArchiveFilter(option.id)}
+                  type="button"
+                >
+                  <span>{option.label}</span>
+                  <small>{option.count}</small>
+                </button>
+              ))}
+            </div>
           </div>
         ) : null}
 
@@ -110,8 +136,12 @@ export default function SectionPage({ onNavigate, section }: SectionPageProps) {
           </div>
         ) : (
           <div className="empty-state">
-            <strong>아직 공개된 기록이 없어요.</strong>
-            <p>이 섹션은 곧 새로운 기록을 받을 빈 페이지로 남겨둘게요.</p>
+            <strong>{section === 'archive' ? '맞는 기록을 찾지 못했어요.' : '아직 공개된 기록이 없어요.'}</strong>
+            <p>
+              {section === 'archive'
+                ? '검색어를 줄이거나 다른 필터로 다시 훑어보세요.'
+                : '이 섹션은 곧 새로운 기록을 받을 빈 페이지로 남겨둘게요.'}
+            </p>
           </div>
         )}
       </main>

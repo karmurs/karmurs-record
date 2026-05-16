@@ -86,6 +86,24 @@ describe('Karmurs Record homepage', () => {
     expect(screen.getByRole('button', { name: /Devlog 카드 추가/i })).toBeInTheDocument();
   });
 
+  it('searches archive records across text and tags', async () => {
+    const user = userEvent.setup();
+    render(<App />);
+
+    const quickNav = screen.getByRole('navigation', { name: 'Quick record navigation' });
+    await user.click(within(quickNav).getByRole('button', { name: '기록함' }));
+
+    await user.type(screen.getByLabelText('Search archive'), 'homepage');
+
+    expect(screen.getByRole('button', { name: /Devlog 카드 추가/i })).toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: /첫 무드 보드/i })).not.toBeInTheDocument();
+
+    await user.clear(screen.getByLabelText('Search archive'));
+    await user.type(screen.getByLabelText('Search archive'), 'nothing-matches-this');
+
+    expect(screen.getByText('맞는 기록을 찾지 못했어요.')).toBeInTheDocument();
+  });
+
   it('opens a real record from the random discovery prompt', async () => {
     const user = userEvent.setup();
     render(<App />);

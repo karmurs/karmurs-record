@@ -386,12 +386,54 @@ button {
   max-width: 720px;
 }
 
+.archive-tools {
+  display: grid;
+  gap: 16px;
+  margin: -10px 0 34px;
+}
+
+.archive-search {
+  display: grid;
+  gap: 9px;
+  max-width: 480px;
+}
+
+.archive-search span {
+  color: rgba(246, 239, 227, 0.62);
+  font-size: 0.74rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.archive-search input {
+  background: rgba(246, 239, 227, 0.08);
+  border: 1px solid rgba(246, 239, 227, 0.2);
+  border-radius: 8px;
+  color: #fff7ea;
+  font: inherit;
+  min-height: 46px;
+  outline: none;
+  padding: 0 14px;
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease;
+}
+
+.archive-search input::placeholder {
+  color: rgba(246, 239, 227, 0.44);
+}
+
+.archive-search input:focus {
+  background: rgba(246, 239, 227, 0.12);
+  border-color: rgba(246, 239, 227, 0.52);
+}
+
 .archive-filter {
   align-items: center;
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
-  margin: -10px 0 34px;
 }
 
 .filter-chip {
