@@ -252,6 +252,14 @@ button {
   background: #fff7ea;
 }
 
+.primary-card-devlog {
+  background: #c8b6a2;
+}
+
+.primary-card-devlog::after {
+  background: #5f3b28;
+}
+
 .discovery-row {
   display: grid;
   gap: 16px;
@@ -394,6 +402,10 @@ button {
 
 .record-card-mono {
   background: #d7d0c5;
+}
+
+.record-card-dev {
+  background: #c8b6a2;
 }
 
 .record-card time,

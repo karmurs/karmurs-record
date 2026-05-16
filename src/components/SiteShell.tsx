@@ -5,13 +5,15 @@ const topNavItems = [
   { label: 'HOME', view: { name: 'home' } },
   { label: 'JOURNAL', view: { name: 'section', section: 'journal' } },
   { label: 'GALLERY', view: { name: 'section', section: 'gallery' } },
-  { label: 'RACING', view: { name: 'section', section: 'racing' } }
+  { label: 'RACING', view: { name: 'section', section: 'racing' } },
+  { label: 'DEVLOG', view: { name: 'section', section: 'devlog' } }
 ] satisfies { label: string; view: View }[];
 
 const floatingNavItems = [
   { label: '오늘', view: { name: 'section', section: 'journal' } },
   { label: '사진', view: { name: 'section', section: 'gallery' } },
   { label: '레이싱', view: { name: 'section', section: 'racing' } },
+  { label: '개발', view: { name: 'section', section: 'devlog' } },
   { label: '기록함', view: { name: 'section', section: 'archive' } }
 ] satisfies { label: string; view: View }[];
 

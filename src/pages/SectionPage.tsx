@@ -21,6 +21,10 @@ const sectionCopy: Record<RecordType, { title: string; description: string }> = 
     title: 'Racing',
     description: '랩타임, 세션, 트랙 메모를 기록하는 공간.'
   },
+  devlog: {
+    title: 'Devlog',
+    description: '홈페이지 제작 과정, 수정 기록, 다음 아이디어를 남기는 개발일지.'
+  },
   archive: {
     title: 'Archive',
     description: '글, 사진, 파일, 링크를 오래 보관하는 기록함.'

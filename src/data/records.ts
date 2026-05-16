@@ -1,4 +1,11 @@
-export type RecordType = 'journal' | 'gallery' | 'racing' | 'archive' | 'project' | 'note';
+export type RecordType =
+  | 'journal'
+  | 'gallery'
+  | 'racing'
+  | 'devlog'
+  | 'archive'
+  | 'project'
+  | 'note';
 
 export type RecordVisibility = 'link' | 'private';
 
@@ -13,7 +20,7 @@ export type RecordEntry = {
   visibility: RecordVisibility;
   createdAt: string;
   updatedAt: string;
-  imageTone?: 'warm' | 'mono' | 'racing';
+  imageTone?: 'warm' | 'mono' | 'racing' | 'dev';
   lapTime?: string;
   racingTrack?: string;
   racingCar?: string;
@@ -37,6 +44,12 @@ export const primarySections = [
     title: 'Racing',
     label: '랩타임, 세션, 트랙 메모',
     eyebrow: 'lap records'
+  },
+  {
+    id: 'devlog' as const,
+    title: 'Devlog',
+    label: '개발일지, 수정 기록, 아이디어',
+    eyebrow: 'build notes'
   }
 ];
 
@@ -82,6 +95,19 @@ export const records: RecordEntry[] = [
     lapTime: '1:48.532',
     racingTrack: 'Example Circuit',
     racingCar: 'GT3'
+  },
+  {
+    id: 'devlog-first-note',
+    title: 'Devlog 카드 추가',
+    type: 'devlog',
+    date: '2026-05-16',
+    summary: '홈 화면에 개발일지용 Devlog 카드를 추가했다.',
+    body: '홈페이지가 단순한 기록장이 아니라 계속 만들어지는 프로젝트라는 점을 남기기 위해 Devlog 섹션을 추가한다. 앞으로 디자인 변경, 배포 기록, 기능 아이디어를 이곳에 쌓아간다.',
+    tags: ['devlog', 'homepage'],
+    visibility: 'link',
+    createdAt: '2026-05-16T08:50:00+09:00',
+    updatedAt: '2026-05-16T08:50:00+09:00',
+    imageTone: 'dev'
   }
 ];
 
