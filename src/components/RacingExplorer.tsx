@@ -24,6 +24,7 @@ export default function RacingExplorer() {
     [gameSessions, selectedSessionType]
   );
   const selectedMenu = selectedGame.menus.find((menu) => menu.id === selectedMenuId);
+  const previewSession = visibleSessions[0] ?? gameSessions[0];
 
   return (
     <section className="racing-explorer" aria-label="Racing records explorer">
@@ -74,12 +75,25 @@ export default function RacingExplorer() {
       <div className="racing-content">
         <div className={`racing-visual-band racing-accent-${selectedGame.accent}`}>
           <div className="track-preview" aria-label={`${selectedGame.shortTitle} track preview`}>
-            <span className="track-line" />
+            {previewSession?.trackImage ? (
+              <img alt={`${previewSession.track} track`} src={previewSession.trackImage} />
+            ) : (
+              <span className="track-line" />
+            )}
             <strong>{selectedGame.shortTitle}</strong>
           </div>
           <div className="car-preview" aria-label={`${selectedGame.shortTitle} car preview`}>
-            <span className="car-body" />
-            <span className="car-shadow" />
+            {previewSession?.carImage ? (
+              <>
+                <img alt={`${previewSession.car} car`} src={previewSession.carImage} />
+                <span className="car-badge">{previewSession.carBadge}</span>
+              </>
+            ) : (
+              <>
+                <span className="car-body" />
+                <span className="car-shadow" />
+              </>
+            )}
           </div>
         </div>
 

@@ -24,6 +24,9 @@ export type RacingSession = {
   date: string;
   track: string;
   car: string;
+  carBadge: string;
+  trackImage?: string;
+  carImage?: string;
   sessionType: SessionType;
   bestLap: string;
   note: string;
@@ -68,6 +71,9 @@ export const racingSessions: RacingSession[] = [
     date: '2026-05-16',
     track: 'Spa-Francorchamps',
     car: 'BMW M4 GT3',
+    carBadge: 'BMW',
+    trackImage: 'racing/tracks/spa-francorchamps.jpg',
+    carImage: 'racing/cars/bmw-m4-gt3.jpg',
     sessionType: 'Practice',
     bestLap: '2:19.842',
     note: '브레이킹 포인트와 섹터 2 리듬 확인.'
@@ -78,6 +84,9 @@ export const racingSessions: RacingSession[] = [
     date: '2026-05-15',
     track: 'Monza',
     car: 'Ferrari 296 GT3',
+    carBadge: 'Ferrari',
+    trackImage: 'racing/tracks/monza.jpg',
+    carImage: 'racing/cars/ferrari-296-gt3.jpg',
     sessionType: 'Qualifying',
     bestLap: '1:47.921',
     note: '어센션 탈출에서 트랙션 손실이 큼.'
@@ -88,6 +97,9 @@ export const racingSessions: RacingSession[] = [
     date: '2026-05-14',
     track: 'Nurburgring',
     car: 'Porsche 992 GT3 R',
+    carBadge: 'Porsche',
+    trackImage: 'racing/tracks/nurburgring.jpg',
+    carImage: 'racing/cars/porsche-992-gt3.jpg',
     sessionType: 'Race',
     bestLap: '1:55.302',
     note: '연료 무게 변화에 따른 언더스티어 기록.'
@@ -98,6 +110,9 @@ export const racingSessions: RacingSession[] = [
     date: '2026-05-13',
     track: 'Imola',
     car: 'Alfa Romeo Giulia GTAm',
+    carBadge: 'Alfa Romeo',
+    trackImage: 'racing/tracks/imola.jpg',
+    carImage: 'racing/cars/alfa-romeo-giulia-gtam.jpg',
     sessionType: 'Test',
     bestLap: '1:58.440',
     note: 'FFB 연결감과 중속 코너 회두감 메모.'
@@ -108,6 +123,9 @@ export const racingSessions: RacingSession[] = [
     date: '2026-05-12',
     track: 'Fuji Speedway',
     car: 'Ferrari 499P',
+    carBadge: 'Ferrari',
+    trackImage: 'racing/tracks/fuji-speedway.jpg',
+    carImage: 'racing/cars/ferrari-499p.jpg',
     sessionType: 'Hotlap',
     bestLap: '1:30.188',
     note: '고속 섹터에서 ERS 사용 타이밍 비교.'

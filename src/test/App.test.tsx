@@ -113,6 +113,10 @@ describe('Karmurs Record homepage', () => {
 
     expect(screen.getByRole('heading', { name: 'Racing' })).toBeInTheDocument();
     const racingExplorer = screen.getByRole('region', { name: 'Racing records explorer' });
+    expect(within(racingExplorer).getByRole('img', { name: 'Spa-Francorchamps track' }))
+      .toBeInTheDocument();
+    expect(within(racingExplorer).getByRole('img', { name: 'BMW M4 GT3 car' })).toBeInTheDocument();
+    expect(within(racingExplorer).getByText('BMW')).toBeInTheDocument();
     expect(within(racingExplorer).getByRole('button', { name: /Assetto Corsa Competizione/i }))
       .toBeInTheDocument();
     expect(within(racingExplorer).getByRole('button', { name: /Assetto Corsa EVO/i }))
@@ -126,6 +130,8 @@ describe('Karmurs Record homepage', () => {
       within(racingExplorer).getByRole('heading', { name: 'Le Mans Ultimate' })
     ).toBeInTheDocument();
     expect(within(racingExplorer).getByText('Fuji Speedway')).toBeInTheDocument();
+    expect(within(racingExplorer).getByRole('img', { name: 'Fuji Speedway track' }))
+      .toBeInTheDocument();
 
     await user.click(within(racingExplorer).getByRole('button', { name: 'Race' }));
 
