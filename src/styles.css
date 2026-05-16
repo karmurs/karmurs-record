@@ -1133,6 +1133,41 @@ button {
   font-size: 0.5rem;
 }
 
+.catalog-grid {
+  border: 1px solid rgba(246, 239, 227, 0.12);
+  border-radius: 8px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin-bottom: 72px;
+  max-height: clamp(360px, 48vh, 560px);
+  overflow: auto;
+}
+
+.catalog-row {
+  align-items: center;
+  border-bottom: 1px solid rgba(246, 239, 227, 0.08);
+  color: rgba(246, 239, 227, 0.72);
+  display: flex;
+  gap: 12px;
+  min-height: 58px;
+  padding: 10px 14px;
+}
+
+.catalog-row:nth-child(odd) {
+  border-right: 1px solid rgba(246, 239, 227, 0.08);
+}
+
+.catalog-row strong {
+  color: #fff7ea;
+  display: block;
+  font-size: 0.92rem;
+  margin-bottom: 2px;
+}
+
+.catalog-row span:not(.brand-mark, .track-layout-mini) {
+  font-size: 0.78rem;
+}
+
 .record-card {
   background: var(--record-bg, rgba(246, 239, 227, 0.94));
   border: 1px solid rgba(255, 255, 255, 0.08);

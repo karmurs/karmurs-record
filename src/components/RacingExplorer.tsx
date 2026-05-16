@@ -1,5 +1,11 @@
 import { useMemo, useState } from 'react';
 import {
+  brandFallbacks,
+  brandLogoPaths,
+  racingCarCatalog,
+  racingTrackCatalog
+} from '../data/racingCatalog';
+import {
   racingGames,
   racingSessions,
   type RacingGameId,
@@ -20,12 +26,6 @@ const trackPaths: Record<string, string> = {
   'fuji-speedway': 'M8 34 C15 22 33 18 50 18 C60 18 58 31 47 34 C33 38 18 43 8 34 Z'
 };
 
-const brandLogos: Record<string, string> = {
-  BMW: 'racing/brands/bmw.svg',
-  Ferrari: 'racing/brands/ferrari.svg',
-  Porsche: 'racing/brands/porsche.svg'
-};
-
 export default function RacingExplorer() {
   const [selectedGameId, setSelectedGameId] = useState<RacingGameId>('acc');
   const [selectedMenuId, setSelectedMenuId] = useState<RacingMenuId>('sessions');
@@ -42,6 +42,8 @@ export default function RacingExplorer() {
   );
   const selectedMenu = selectedGame.menus.find((menu) => menu.id === selectedMenuId);
   const previewSession = visibleSessions[0];
+  const catalogTracks = racingTrackCatalog.filter((track) => track.gameId === selectedGame.id);
+  const catalogCars = racingCarCatalog.filter((car) => car.gameId === selectedGame.id);
 
   return (
     <section className="racing-explorer" aria-label="Racing records explorer">
@@ -131,26 +133,81 @@ export default function RacingExplorer() {
             <p>{selectedMenu?.label ?? 'Sessions'} 기록을 세션 타입, 트랙, 차량 기준으로 훑어보는 공간.</p>
           </div>
           <div className="racing-stat">
-            <strong>{gameSessions.length}</strong>
-            <span>saved sessions</span>
+            <strong>
+              {selectedMenuId === 'tracks'
+                ? catalogTracks.length
+                : selectedMenuId === 'cars'
+                  ? catalogCars.length
+                  : gameSessions.length}
+            </strong>
+            <span>{selectedMenuId === 'tracks' ? 'tracks' : selectedMenuId === 'cars' ? 'cars' : 'saved sessions'}</span>
           </div>
         </header>
 
-        <div className="session-toolbar" aria-label="Session type filters" role="group">
-          {(['All', ...sessionTypeLabels] as const).map((type) => (
-            <button
-              aria-pressed={selectedSessionType === type}
-              className={`session-chip session-${type.toLowerCase()}`}
-              key={type}
-              onClick={() => setSelectedSessionType(type)}
-              type="button"
-            >
-              {type}
-            </button>
-          ))}
-        </div>
+        {selectedMenuId === 'sessions' ? (
+          <div className="session-toolbar" aria-label="Session type filters" role="group">
+            {(['All', ...sessionTypeLabels] as const).map((type) => (
+              <button
+                aria-pressed={selectedSessionType === type}
+                className={`session-chip session-${type.toLowerCase()}`}
+                key={type}
+                onClick={() => setSelectedSessionType(type)}
+                type="button"
+              >
+                {type}
+              </button>
+            ))}
+          </div>
+        ) : null}
 
-        <div className="session-table" role="table" aria-label={`${selectedGame.title} sessions`}>
+        {selectedMenuId === 'tracks' ? (
+          <div className="catalog-grid" role="list" aria-label={`${selectedGame.title} implemented tracks`}>
+            {catalogTracks.map((track) => (
+              <div className="catalog-row" role="listitem" key={`${track.gameId}-${track.name}`}>
+                <span
+                  aria-label={`${track.name} layout`}
+                  className={`track-layout-mini racing-accent-${selectedGame.accent} track-${getTrackClass(track.name)}`}
+                  role="img"
+                >
+                  <svg aria-hidden="true" viewBox="0 0 64 52">
+                    <path d={trackPaths[getTrackClass(track.name)] ?? trackPaths.monza} />
+                  </svg>
+                </span>
+                <div>
+                  <strong>{track.name}</strong>
+                  <span>{track.layouts ?? track.source}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : null}
+
+        {selectedMenuId === 'cars' ? (
+          <div className="catalog-grid catalog-grid-cars" role="list" aria-label={`${selectedGame.title} implemented cars`}>
+            {catalogCars.map((car) => (
+              <div className="catalog-row" role="listitem" key={`${car.gameId}-${car.brand}-${car.name}`}>
+                <span
+                  aria-label={`${car.brand} badge`}
+                  className={`brand-mark brand-${getBrandClass(car.brand)}`}
+                  role="img"
+                >
+                  {brandLogoPaths[car.brand] ? (
+                    <img alt="" aria-hidden="true" src={brandLogoPaths[car.brand]} />
+                  ) : (
+                    brandFallbacks[car.brand] ?? car.brand.slice(0, 2)
+                  )}
+                </span>
+                <div>
+                  <strong>{car.name}</strong>
+                  <span>{car.brand} · {car.category}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : null}
+
+        {selectedMenuId === 'sessions' ? (
+          <div className="session-table" role="table" aria-label={`${selectedGame.title} sessions`}>
           <div className="session-row session-row-head" role="row">
             <span>Date</span>
             <span>Track</span>
@@ -180,10 +237,10 @@ export default function RacingExplorer() {
                   className={`brand-mark brand-${getBrandClass(session.carBadge)}`}
                   role="img"
                 >
-                  {brandLogos[session.carBadge] ? (
-                    <img alt="" aria-hidden="true" src={brandLogos[session.carBadge]} />
+                  {brandLogoPaths[session.carBadge] ? (
+                    <img alt="" aria-hidden="true" src={brandLogoPaths[session.carBadge]} />
                   ) : (
-                    session.carBadge
+                    brandFallbacks[session.carBadge] ?? session.carBadge
                   )}
                 </span>
                 <span>{session.car}</span>
@@ -196,6 +253,7 @@ export default function RacingExplorer() {
             </div>
           ))}
         </div>
+        ) : null}
       </div>
     </section>
   );

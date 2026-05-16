@@ -1,6 +1,15 @@
+import { getCatalogCounts } from './racingCatalog';
+
 export type RacingGameId = 'acc' | 'ace' | 'lmu';
 
-export type RacingMenuId = 'sessions' | 'setups' | 'lap-notes' | 'screenshots' | 'telemetry';
+export type RacingMenuId =
+  | 'sessions'
+  | 'tracks'
+  | 'cars'
+  | 'setups'
+  | 'lap-notes'
+  | 'screenshots'
+  | 'telemetry';
 
 export type SessionType = 'Practice' | 'Qualifying' | 'Race' | 'Hotlap' | 'Test';
 
@@ -32,13 +41,19 @@ export type RacingSession = {
   note: string;
 };
 
-const defaultMenus: RacingMenuItem[] = [
+const createMenus = (gameId: RacingGameId): RacingMenuItem[] => {
+  const counts = getCatalogCounts(gameId);
+
+  return [
   { id: 'sessions', label: 'Sessions', count: 3 },
+  { id: 'tracks', label: 'Tracks', count: counts.tracks },
+  { id: 'cars', label: 'Cars', count: counts.cars },
   { id: 'setups', label: 'Setups', count: 2 },
   { id: 'lap-notes', label: 'Lap Notes', count: 4 },
   { id: 'screenshots', label: 'Screenshots', count: 6 },
   { id: 'telemetry', label: 'Telemetry', count: 1 }
-];
+  ];
+};
 
 export const racingGames: RacingGame[] = [
   {
@@ -46,21 +61,21 @@ export const racingGames: RacingGame[] = [
     title: 'Assetto Corsa Competizione',
     shortTitle: 'ACC',
     accent: 'acc',
-    menus: defaultMenus
+    menus: createMenus('acc')
   },
   {
     id: 'ace',
     title: 'Assetto Corsa EVO',
     shortTitle: 'ACE',
     accent: 'ace',
-    menus: defaultMenus
+    menus: createMenus('ace')
   },
   {
     id: 'lmu',
     title: 'Le Mans Ultimate',
     shortTitle: 'LMU',
     accent: 'lmu',
-    menus: defaultMenus
+    menus: createMenus('lmu')
   }
 ];
 
