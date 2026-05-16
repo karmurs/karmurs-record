@@ -121,7 +121,7 @@ describe('Karmurs Record homepage', () => {
       .not.toBeInTheDocument();
     expect(within(racingExplorer).queryByRole('img', { name: 'Ferrari 296 GT3 thumbnail' }))
       .not.toBeInTheDocument();
-    expect(within(racingExplorer).getAllByText('BMW').length).toBeGreaterThan(1);
+    expect(within(racingExplorer).getByRole('img', { name: 'BMW badge' })).toBeInTheDocument();
     expect(within(racingExplorer).getByRole('button', { name: /Assetto Corsa Competizione/i }))
       .toBeInTheDocument();
     expect(within(racingExplorer).getByRole('button', { name: /Assetto Corsa EVO/i }))

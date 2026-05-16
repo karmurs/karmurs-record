@@ -10,6 +10,22 @@ import {
 const sessionTypeLabels: SessionType[] = ['Practice', 'Qualifying', 'Race', 'Hotlap', 'Test'];
 
 const getBrandClass = (brand: string) => brand.toLowerCase().replace(/\s+/g, '-');
+const getTrackClass = (track: string) => track.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+
+const trackPaths: Record<string, string> = {
+  'spa-francorchamps': 'M10 32 C18 14 35 10 47 18 C58 26 45 35 33 38 C22 41 14 40 10 32 Z',
+  monza: 'M15 31 C19 18 43 14 52 22 C62 31 42 38 27 38 C16 38 10 35 15 31 Z',
+  nurburgring: 'M10 34 C18 22 18 12 30 14 C42 16 39 27 52 25 C61 24 57 39 43 41 C29 43 18 41 10 34 Z',
+  imola: 'M14 36 C25 18 42 13 51 22 C58 29 52 37 40 36 C29 35 24 43 14 36 Z',
+  'fuji-speedway': 'M8 34 C15 22 33 18 50 18 C60 18 58 31 47 34 C33 38 18 43 8 34 Z'
+};
+
+const brandSymbols: Record<string, string> = {
+  'Alfa Romeo': 'AR',
+  BMW: 'B',
+  Ferrari: 'F',
+  Porsche: 'P'
+};
 
 export default function RacingExplorer() {
   const [selectedGameId, setSelectedGameId] = useState<RacingGameId>('acc');
@@ -152,14 +168,24 @@ export default function RacingExplorer() {
             <div className="session-row" role="row" key={session.id}>
               <span>{session.date}</span>
               <strong className="session-media-cell">
-                <span className={`track-layout-mini racing-accent-${selectedGame.accent}`} aria-hidden="true">
-                  <span />
+                <span
+                  aria-label={`${session.track} layout`}
+                  className={`track-layout-mini racing-accent-${selectedGame.accent} track-${getTrackClass(session.track)}`}
+                  role="img"
+                >
+                  <svg aria-hidden="true" viewBox="0 0 64 52">
+                    <path d={trackPaths[getTrackClass(session.track)] ?? trackPaths.monza} />
+                  </svg>
                 </span>
                 <span>{session.track}</span>
               </strong>
               <span className="session-media-cell">
-                <span className={`brand-mark brand-${getBrandClass(session.carBadge)}`}>
-                  {session.carBadge}
+                <span
+                  aria-label={`${session.carBadge} badge`}
+                  className={`brand-mark brand-${getBrandClass(session.carBadge)}`}
+                  role="img"
+                >
+                  {brandSymbols[session.carBadge] ?? session.carBadge.slice(0, 1)}
                 </span>
                 <span>{session.car}</span>
               </span>
