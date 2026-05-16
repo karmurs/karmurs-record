@@ -84,7 +84,7 @@ export default function SectionPage({ onNavigate, section }: SectionPageProps) {
 
   return (
     <SiteShell onNavigate={onNavigate}>
-      <main className="page-panel">
+      <main className={`page-panel ${section === 'racing' ? 'page-panel-racing' : ''}`}>
         <div className="page-actions">
           <button
             className="text-button"

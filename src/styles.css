@@ -339,6 +339,32 @@ button {
   padding: 70px 0 118px;
 }
 
+.page-panel-racing {
+  max-width: min(1780px, calc(100vw - 72px));
+  padding-top: clamp(28px, 4vh, 52px);
+  padding-bottom: 150px;
+}
+
+.page-panel-racing .page-actions {
+  margin-bottom: 22px;
+}
+
+.page-panel-racing .section-intro {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  max-width: none;
+  padding-bottom: 22px;
+}
+
+.page-panel-racing .section-intro h1 {
+  font-size: clamp(3.4rem, 5.8vw, 6.4rem);
+  margin: 12px 0 12px;
+}
+
+.page-panel-racing .section-intro p:not(.hero-kicker) {
+  max-width: 560px;
+}
+
 .page-actions {
   display: flex;
   gap: 10px;
@@ -486,8 +512,8 @@ button {
   border: 1px solid rgba(246, 239, 227, 0.14);
   border-radius: 8px;
   display: grid;
-  grid-template-columns: minmax(220px, 290px) minmax(0, 1fr);
-  min-height: 620px;
+  grid-template-columns: clamp(250px, 18vw, 340px) minmax(0, 1fr);
+  min-height: clamp(560px, 64vh, 760px);
   overflow: hidden;
 }
 
@@ -597,14 +623,14 @@ button {
 
 .racing-content {
   min-width: 0;
-  padding: 22px;
+  padding: clamp(18px, 1.5vw, 28px);
 }
 
 .racing-visual-band {
   display: grid;
   gap: 14px;
   grid-template-columns: minmax(0, 1.05fr) minmax(220px, 0.95fr);
-  margin-bottom: 22px;
+  margin-bottom: clamp(16px, 2vh, 22px);
 }
 
 .track-preview,
@@ -614,7 +640,7 @@ button {
     rgba(246, 239, 227, 0.08);
   border: 1px solid rgba(246, 239, 227, 0.12);
   border-radius: 8px;
-  min-height: 154px;
+  min-height: clamp(126px, 16vh, 178px);
   overflow: hidden;
   position: relative;
 }
@@ -691,14 +717,14 @@ button {
   display: flex;
   gap: 18px;
   justify-content: space-between;
-  margin-bottom: 18px;
+  margin-bottom: 14px;
 }
 
 .racing-content-header h2 {
   color: #fff7ea;
-  font-size: clamp(2rem, 5vw, 4.2rem);
+  font-size: clamp(2.2rem, 4.2vw, 4.8rem);
   line-height: 0.92;
-  margin: 10px 0 12px;
+  margin: 8px 0 10px;
 }
 
 .racing-content-header p:not(.hero-kicker) {
@@ -797,8 +823,8 @@ button {
   display: grid;
   gap: 12px;
   grid-template-columns: 0.82fr 1.1fr 1.1fr 0.78fr 0.78fr 1.35fr;
-  min-height: 62px;
-  padding: 12px 14px;
+  min-height: clamp(50px, 5.6vh, 62px);
+  padding: 10px 14px;
 }
 
 .session-row:first-child {
