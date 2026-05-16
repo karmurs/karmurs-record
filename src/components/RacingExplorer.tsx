@@ -26,6 +26,25 @@ const trackPaths: Record<string, string> = {
   'fuji-speedway': 'M8 34 C15 22 33 18 50 18 C60 18 58 31 47 34 C33 38 18 43 8 34 Z'
 };
 
+const fallbackTrackPaths = [
+  'M11 31 C15 18 32 12 46 18 C58 23 55 38 40 40 C25 42 12 39 11 31 Z',
+  'M9 34 C20 20 33 17 50 21 C60 24 58 35 45 36 C30 38 22 45 9 34 Z',
+  'M13 36 C19 18 42 12 52 23 C61 34 42 38 30 34 C21 31 18 43 13 36 Z',
+  'M9 29 C17 16 31 17 38 24 C45 31 57 23 58 32 C59 42 40 43 26 39 C15 36 5 37 9 29 Z',
+  'M14 34 C16 24 26 15 36 16 C50 17 57 25 51 34 C45 43 26 41 14 34 Z',
+  'M10 35 C16 21 29 21 37 15 C49 6 60 22 52 31 C44 41 21 45 10 35 Z'
+];
+
+const getTrackPath = (track: string) => {
+  const key = getTrackClass(track);
+  if (trackPaths[key]) {
+    return trackPaths[key];
+  }
+
+  const index = [...key].reduce((sum, char) => sum + char.charCodeAt(0), 0) % fallbackTrackPaths.length;
+  return fallbackTrackPaths[index];
+};
+
 export default function RacingExplorer() {
   const [selectedGameId, setSelectedGameId] = useState<RacingGameId>('acc');
   const [selectedMenuId, setSelectedMenuId] = useState<RacingMenuId>('sessions');
@@ -170,7 +189,7 @@ export default function RacingExplorer() {
                   role="img"
                 >
                   <svg aria-hidden="true" viewBox="0 0 64 52">
-                    <path d={trackPaths[getTrackClass(track.name)] ?? trackPaths.monza} />
+                    <path d={getTrackPath(track.name)} />
                   </svg>
                 </span>
                 <div>
@@ -226,7 +245,7 @@ export default function RacingExplorer() {
                   role="img"
                 >
                   <svg aria-hidden="true" viewBox="0 0 64 52">
-                    <path d={trackPaths[getTrackClass(session.track)] ?? trackPaths.monza} />
+                    <path d={getTrackPath(session.track)} />
                   </svg>
                 </span>
                 <span>{session.track}</span>
