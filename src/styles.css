@@ -666,6 +666,15 @@ button {
   width: 100%;
 }
 
+.car-preview .car-preview-image {
+  height: calc(100% - 16px);
+  inset: 8px 12px;
+  object-fit: cover;
+  object-position: center;
+  width: calc(100% - 24px);
+  z-index: 1;
+}
+
 .car-preview {
   background:
     radial-gradient(circle at 50% 40%, rgba(246, 239, 227, 0.12), transparent 42%),
@@ -1064,7 +1073,7 @@ button {
   color: #fff7ea;
   display: inline-flex;
   flex: 0 0 25px;
-  font-size: 0.58rem;
+  font-size: 0.5rem;
   font-weight: 900;
   height: 25px;
   justify-content: center;
@@ -1073,6 +1082,13 @@ button {
   text-align: center;
   text-transform: uppercase;
   width: 25px;
+}
+
+.brand-mark img {
+  display: block;
+  height: 15px;
+  object-fit: contain;
+  width: 15px;
 }
 
 .brand-bmw.brand-mark {
@@ -1092,12 +1108,23 @@ button {
   font-size: 0.62rem;
 }
 
+.brand-ferrari.brand-mark img {
+  filter: none;
+  height: 18px;
+  width: 18px;
+}
+
 .brand-porsche.brand-mark {
   background: linear-gradient(180deg, #d3b678, #7f6233);
   border-color: rgba(246, 239, 227, 0.42);
   border-radius: 6px 6px 10px 10px;
   color: #20150f;
   font-size: 0.62rem;
+}
+
+.brand-porsche.brand-mark img {
+  height: 17px;
+  width: 17px;
 }
 
 .brand-alfa-romeo.brand-mark {

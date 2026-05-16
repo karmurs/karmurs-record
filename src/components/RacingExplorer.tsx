@@ -20,11 +20,10 @@ const trackPaths: Record<string, string> = {
   'fuji-speedway': 'M8 34 C15 22 33 18 50 18 C60 18 58 31 47 34 C33 38 18 43 8 34 Z'
 };
 
-const brandSymbols: Record<string, string> = {
-  'Alfa Romeo': 'AR',
-  BMW: 'B',
-  Ferrari: 'F',
-  Porsche: 'P'
+const brandLogos: Record<string, string> = {
+  BMW: 'racing/brands/bmw.svg',
+  Ferrari: 'racing/brands/ferrari.svg',
+  Porsche: 'racing/brands/porsche.svg'
 };
 
 export default function RacingExplorer() {
@@ -107,19 +106,15 @@ export default function RacingExplorer() {
             <strong>{selectedGame.shortTitle}</strong>
           </div>
           <div className="car-preview" aria-label={`${selectedGame.shortTitle} car preview`}>
-            {previewSession ? (
-              <div className={`showcase-car brand-${getBrandClass(previewSession.carBadge)}`}>
-                <span className="showcase-car-roof" />
-                <span className="showcase-car-body" />
-                <span className="showcase-car-wing" />
-                <span className="showcase-wheel showcase-wheel-front" />
-                <span className="showcase-wheel showcase-wheel-rear" />
+            {previewSession?.carImage ? (
+              <>
+                <img className="car-preview-image" alt={`${previewSession.car} car`} src={previewSession.carImage} />
                 <span className="media-label">
-                  <small>Car model</small>
+                  <small>Car photo</small>
                   {previewSession.car}
                 </span>
                 <span className="car-badge">{previewSession.carBadge}</span>
-              </div>
+              </>
             ) : (
               <>
                 <span className="car-body" />
@@ -185,7 +180,11 @@ export default function RacingExplorer() {
                   className={`brand-mark brand-${getBrandClass(session.carBadge)}`}
                   role="img"
                 >
-                  {brandSymbols[session.carBadge] ?? session.carBadge.slice(0, 1)}
+                  {brandLogos[session.carBadge] ? (
+                    <img alt="" aria-hidden="true" src={brandLogos[session.carBadge]} />
+                  ) : (
+                    session.carBadge
+                  )}
                 </span>
                 <span>{session.car}</span>
               </span>

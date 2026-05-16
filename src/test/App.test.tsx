@@ -116,7 +116,7 @@ describe('Karmurs Record homepage', () => {
     expect(within(racingExplorer).getByRole('img', { name: 'Spa-Francorchamps track' }))
       .toBeInTheDocument();
     expect(within(racingExplorer).getByText('Track photo')).toBeInTheDocument();
-    expect(within(racingExplorer).getByText('Car model')).toBeInTheDocument();
+    expect(within(racingExplorer).getByText('Car photo')).toBeInTheDocument();
     expect(within(racingExplorer).queryByRole('img', { name: 'Monza thumbnail' }))
       .not.toBeInTheDocument();
     expect(within(racingExplorer).queryByRole('img', { name: 'Ferrari 296 GT3 thumbnail' }))

@@ -15,3 +15,6 @@ They are not official game, manufacturer, or series logos.
 | `public/racing/cars/porsche-992-gt3.jpg` | [Porsche 992 GT3](https://commons.wikimedia.org/wiki/File:Porsche_992_GT3.jpg) | Alexandre Prevot | CC BY-SA 4.0 |
 | `public/racing/cars/alfa-romeo-giulia-gtam.jpg` | [Alfa Romeo Giulia GTAm](https://commons.wikimedia.org/wiki/File:Alfa_Romeo_Giulia_GTAm.jpg) | Calreyn88 | CC0 1.0 |
 | `public/racing/cars/ferrari-499p.jpg` | [Ferrarri AF Corse - Ferrari 499P -51](https://commons.wikimedia.org/wiki/File:Ferrarri_AF_Corse_-_Ferrari_499P_-51_(53077616551).jpg) | Kevin Decherf | CC BY-SA 2.0 |
+| `public/racing/brands/bmw.svg` | [Simple Icons BMW](https://simpleicons.org/?q=bmw) | Simple Icons contributors | CC0 1.0, trademark rights reserved by owner |
+| `public/racing/brands/ferrari.svg` | [Simple Icons Ferrari](https://simpleicons.org/?q=ferrari) | Simple Icons contributors | CC0 1.0, trademark rights reserved by owner |
+| `public/racing/brands/porsche.svg` | [Simple Icons Porsche](https://simpleicons.org/?q=porsche) | Simple Icons contributors | CC0 1.0, trademark rights reserved by owner |
