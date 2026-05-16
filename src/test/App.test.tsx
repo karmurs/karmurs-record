@@ -116,6 +116,12 @@ describe('Karmurs Record homepage', () => {
     expect(within(racingExplorer).getByRole('img', { name: 'Spa-Francorchamps track' }))
       .toBeInTheDocument();
     expect(within(racingExplorer).getByRole('img', { name: 'BMW M4 GT3 car' })).toBeInTheDocument();
+    expect(within(racingExplorer).getByText('Track photo')).toBeInTheDocument();
+    expect(within(racingExplorer).getByText('Car photo')).toBeInTheDocument();
+    expect(within(racingExplorer).getByRole('img', { name: 'Monza thumbnail' }))
+      .toBeInTheDocument();
+    expect(within(racingExplorer).getByRole('img', { name: 'Ferrari 296 GT3 thumbnail' }))
+      .toBeInTheDocument();
     expect(within(racingExplorer).getByText('BMW')).toBeInTheDocument();
     expect(within(racingExplorer).getByRole('button', { name: /Assetto Corsa Competizione/i }))
       .toBeInTheDocument();
@@ -129,7 +135,7 @@ describe('Karmurs Record homepage', () => {
     expect(
       within(racingExplorer).getByRole('heading', { name: 'Le Mans Ultimate' })
     ).toBeInTheDocument();
-    expect(within(racingExplorer).getByText('Fuji Speedway')).toBeInTheDocument();
+    expect(within(racingExplorer).getAllByText('Fuji Speedway').length).toBeGreaterThan(1);
     expect(within(racingExplorer).getByRole('img', { name: 'Fuji Speedway track' }))
       .toBeInTheDocument();
 

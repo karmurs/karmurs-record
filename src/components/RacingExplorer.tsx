@@ -24,7 +24,7 @@ export default function RacingExplorer() {
     [gameSessions, selectedSessionType]
   );
   const selectedMenu = selectedGame.menus.find((menu) => menu.id === selectedMenuId);
-  const previewSession = visibleSessions[0] ?? gameSessions[0];
+  const previewSession = visibleSessions[0];
 
   return (
     <section className="racing-explorer" aria-label="Racing records explorer">
@@ -80,12 +80,22 @@ export default function RacingExplorer() {
             ) : (
               <span className="track-line" />
             )}
+            {previewSession ? (
+              <span className="media-label">
+                <small>Track photo</small>
+                {previewSession.track}
+              </span>
+            ) : null}
             <strong>{selectedGame.shortTitle}</strong>
           </div>
           <div className="car-preview" aria-label={`${selectedGame.shortTitle} car preview`}>
             {previewSession?.carImage ? (
               <>
                 <img alt={`${previewSession.car} car`} src={previewSession.carImage} />
+                <span className="media-label">
+                  <small>Car photo</small>
+                  {previewSession.car}
+                </span>
                 <span className="car-badge">{previewSession.carBadge}</span>
               </>
             ) : (
@@ -135,8 +145,16 @@ export default function RacingExplorer() {
           {visibleSessions.map((session) => (
             <div className="session-row" role="row" key={session.id}>
               <span>{session.date}</span>
-              <strong>{session.track}</strong>
-              <span>{session.car}</span>
+              <strong className="session-media-cell">
+                {session.trackImage ? (
+                  <img alt={`${session.track} thumbnail`} src={session.trackImage} />
+                ) : null}
+                <span>{session.track}</span>
+              </strong>
+              <span className="session-media-cell">
+                {session.carImage ? <img alt={`${session.car} thumbnail`} src={session.carImage} /> : null}
+                <span>{session.car}</span>
+              </span>
               <span className={`session-type session-${session.sessionType.toLowerCase()}`}>
                 {session.sessionType}
               </span>

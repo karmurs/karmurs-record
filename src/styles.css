@@ -676,6 +676,29 @@ button {
   z-index: 1;
 }
 
+.media-label {
+  bottom: 16px;
+  color: #fff7ea;
+  display: grid;
+  font-size: clamp(1rem, 1.15vw, 1.25rem);
+  font-weight: 900;
+  gap: 2px;
+  left: 18px;
+  line-height: 1.08;
+  max-width: calc(100% - 110px);
+  position: absolute;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.7);
+  z-index: 1;
+}
+
+.media-label small {
+  color: rgba(246, 239, 227, 0.66);
+  font-size: 0.64rem;
+  font-weight: 900;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+}
+
 .track-line {
   border: 8px solid rgba(255, 247, 234, 0.72);
   border-left-color: transparent;
@@ -863,7 +886,7 @@ button {
   color: rgba(246, 239, 227, 0.72);
   display: grid;
   gap: 12px;
-  grid-template-columns: 0.82fr 1.1fr 1.1fr 0.78fr 0.78fr 1.35fr;
+  grid-template-columns: 0.72fr 1.28fr 1.34fr 0.74fr 0.7fr 1.35fr;
   min-height: clamp(50px, 5.6vh, 62px);
   padding: 10px 14px;
 }
@@ -883,6 +906,26 @@ button {
 
 .session-row strong {
   color: #fff7ea;
+}
+
+.session-media-cell {
+  align-items: center;
+  display: flex;
+  gap: 10px;
+  min-width: 0;
+}
+
+.session-media-cell img {
+  aspect-ratio: 16 / 10;
+  border: 1px solid rgba(246, 239, 227, 0.16);
+  border-radius: 6px;
+  flex: 0 0 clamp(54px, 4.4vw, 74px);
+  height: clamp(34px, 3vw, 44px);
+  object-fit: cover;
+}
+
+.session-media-cell span {
+  min-width: 0;
 }
 
 .record-card {
