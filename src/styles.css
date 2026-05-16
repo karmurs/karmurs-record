@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Caveat:wght@500;600&display=swap");
+
 :root {
   color: #f6efe3;
   background: #090807;
@@ -151,7 +153,7 @@ button {
 .script-title {
   color: #fff7ea;
   display: grid;
-  font-family: "Segoe Script", "Brush Script MT", cursive;
+  font-family: "Caveat", "Segoe Script", "Brush Script MT", cursive;
   font-size: clamp(4.2rem, 9.4vw, 8.35rem);
   font-weight: 400;
   line-height: 0.8;
@@ -188,10 +190,10 @@ button {
 }
 
 .primary-card {
-  background: rgba(246, 239, 227, 0.94);
+  background: var(--card-bg, rgba(246, 239, 227, 0.94));
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 8px;
-  color: #17110b;
+  color: var(--card-fg, #17110b);
   cursor: pointer;
   display: grid;
   font: inherit;
@@ -207,7 +209,7 @@ button {
 }
 
 .primary-card::after {
-  background: #17110b;
+  background: var(--card-dot, #17110b);
   border-radius: 999px;
   content: "";
   height: 10px;
@@ -218,7 +220,7 @@ button {
 }
 
 .primary-card:hover {
-  background: #fff7ea;
+  background: var(--card-hover, #fff7ea);
   transform: translateY(-4px);
 }
 
@@ -230,14 +232,29 @@ button {
 }
 
 .primary-card > span:last-child {
-  color: rgba(23, 17, 11, 0.68);
+  color: var(--card-muted, rgba(23, 17, 11, 0.68));
   font-size: 0.96rem;
   line-height: 1.5;
 }
 
+.primary-card-journal {
+  --card-bg: #efd8aa;
+  --card-dot: #7a4d21;
+  --card-hover: #f7e5bd;
+}
+
+.primary-card-gallery {
+  --card-bg: #c8d4c3;
+  --card-dot: #3e5a49;
+  --card-hover: #d7e0d3;
+}
+
 .primary-card-racing {
-  background: #965f34;
-  color: #fff7ea;
+  --card-bg: #9d3f2f;
+  --card-dot: #fff7ea;
+  --card-fg: #fff7ea;
+  --card-hover: #b14b38;
+  --card-muted: rgba(255, 247, 234, 0.78);
 }
 
 .primary-card-racing > span:last-child {
@@ -253,11 +270,13 @@ button {
 }
 
 .primary-card-devlog {
-  background: #c8b6a2;
+  --card-bg: #b9c9da;
+  --card-dot: #284b67;
+  --card-hover: #cad7e3;
 }
 
 .primary-card-devlog::after {
-  background: #5f3b28;
+  background: var(--card-dot);
 }
 
 .discovery-row {
@@ -374,7 +393,7 @@ button {
 }
 
 .record-card {
-  background: rgba(246, 239, 227, 0.94);
+  background: var(--record-bg, rgba(246, 239, 227, 0.94));
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 8px;
   color: #17110b;
@@ -391,21 +410,29 @@ button {
 
 .record-card:hover,
 .record-card:focus-visible {
-  background: #fff7ea;
+  background: var(--record-hover, #fff7ea);
   transform: translateY(-4px);
 }
 
+.record-card-warm {
+  --record-bg: #efd8aa;
+  --record-hover: #f7e5bd;
+}
+
 .record-card-racing {
-  background: #965f34;
+  --record-bg: #9d3f2f;
+  --record-hover: #b14b38;
   color: #fff7ea;
 }
 
 .record-card-mono {
-  background: #d7d0c5;
+  --record-bg: #c8d4c3;
+  --record-hover: #d7e0d3;
 }
 
 .record-card-dev {
-  background: #c8b6a2;
+  --record-bg: #b9c9da;
+  --record-hover: #cad7e3;
 }
 
 .record-card time,

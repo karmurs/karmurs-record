@@ -1,9 +1,13 @@
-import { render, screen, within } from '@testing-library/react';
+import { beforeEach, describe, expect, it } from 'vitest';
+import { render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { describe, expect, it } from 'vitest';
 import App from '../App';
 
 describe('Karmurs Record homepage', () => {
+  beforeEach(() => {
+    window.history.replaceState(null, '', '/');
+  });
+
   it('renders the site title, script phrase, and in-memory navigation controls', () => {
     render(<App />);
 
@@ -70,5 +74,22 @@ describe('Karmurs Record homepage', () => {
 
     expect(screen.getByRole('heading', { name: '첫 무드 보드' })).toBeInTheDocument();
     expect(screen.getByText(/다크 에디토리얼과 손글씨 타이틀/)).toBeInTheDocument();
+  });
+
+  it('supports browser back navigation between in-memory views', async () => {
+    const user = userEvent.setup();
+    render(<App />);
+
+    const primaryCards = screen.getByRole('navigation', { name: 'Primary record sections' });
+    await user.click(within(primaryCards).getByRole('button', { name: /Devlog/i }));
+    expect(screen.getByRole('heading', { name: 'Devlog' })).toBeInTheDocument();
+
+    window.history.back();
+
+    await waitFor(() => {
+      expect(
+        screen.getByRole('heading', { name: /Things worth keeping in my record/i })
+      ).toBeInTheDocument();
+    });
   });
 });
