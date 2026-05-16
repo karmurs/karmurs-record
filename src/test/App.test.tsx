@@ -104,6 +104,34 @@ describe('Karmurs Record homepage', () => {
     expect(screen.getByText('맞는 기록을 찾지 못했어요.')).toBeInTheDocument();
   });
 
+  it('renders the racing records explorer with game menus and session filters', async () => {
+    const user = userEvent.setup();
+    render(<App />);
+
+    const primaryCards = screen.getByRole('navigation', { name: 'Primary record sections' });
+    await user.click(within(primaryCards).getByRole('button', { name: /Racing/i }));
+
+    expect(screen.getByRole('heading', { name: 'Racing' })).toBeInTheDocument();
+    const racingExplorer = screen.getByRole('region', { name: 'Racing records explorer' });
+    expect(within(racingExplorer).getByRole('button', { name: /Assetto Corsa Competizione/i }))
+      .toBeInTheDocument();
+    expect(within(racingExplorer).getByRole('button', { name: /Assetto Corsa EVO/i }))
+      .toBeInTheDocument();
+    expect(within(racingExplorer).getByRole('button', { name: /Le Mans Ultimate/i }))
+      .toBeInTheDocument();
+
+    await user.click(within(racingExplorer).getByRole('button', { name: /Le Mans Ultimate/i }));
+
+    expect(
+      within(racingExplorer).getByRole('heading', { name: 'Le Mans Ultimate' })
+    ).toBeInTheDocument();
+    expect(within(racingExplorer).getByText('Fuji Speedway')).toBeInTheDocument();
+
+    await user.click(within(racingExplorer).getByRole('button', { name: 'Race' }));
+
+    expect(within(racingExplorer).queryByText('Fuji Speedway')).not.toBeInTheDocument();
+  });
+
   it('opens a real record from the random discovery prompt', async () => {
     const user = userEvent.setup();
     render(<App />);

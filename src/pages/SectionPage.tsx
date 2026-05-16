@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import type { View } from '../App';
 import RecordCard from '../components/RecordCard';
+import RacingExplorer from '../components/RacingExplorer';
 import SiteShell from '../components/SiteShell';
 import {
   getPublicRecords,
@@ -128,7 +129,9 @@ export default function SectionPage({ onNavigate, section }: SectionPageProps) {
           </div>
         ) : null}
 
-        {records.length > 0 ? (
+        {section === 'racing' ? (
+          <RacingExplorer />
+        ) : records.length > 0 ? (
           <div className="record-grid">
             {records.map((record) => (
               <RecordCard key={record.id} onNavigate={onNavigate} record={record} />
