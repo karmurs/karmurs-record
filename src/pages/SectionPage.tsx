@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import type { View } from '../App';
 import RecordCard from '../components/RecordCard';
 import SiteShell from '../components/SiteShell';
@@ -5,8 +6,11 @@ import {
   getPublicRecords,
   getRecordsByType,
   primarySections,
+  publicRecordTypes,
   type RecordType
 } from '../data/records';
+
+type ArchiveFilter = 'all' | (typeof publicRecordTypes)[number];
 
 const sectionCopy: Record<RecordType, { title: string; description: string }> = {
   journal: {
@@ -45,9 +49,22 @@ type SectionPageProps = {
 };
 
 export default function SectionPage({ onNavigate, section }: SectionPageProps) {
+  const [archiveFilter, setArchiveFilter] = useState<ArchiveFilter>('all');
   const sectionInfo = sectionCopy[section];
-  const records = section === 'archive' ? getPublicRecords() : getRecordsByType(section);
+  const archiveRecords = getPublicRecords();
+  const records =
+    section === 'archive'
+      ? archiveRecords.filter((record) => archiveFilter === 'all' || record.type === archiveFilter)
+      : getRecordsByType(section);
   const primarySection = primarySections.find((item) => item.id === section);
+  const archiveFilterOptions = [
+    { id: 'all' as const, label: 'All', count: archiveRecords.length },
+    ...publicRecordTypes.map((type) => ({
+      id: type,
+      label: sectionCopy[type].title,
+      count: archiveRecords.filter((record) => record.type === type).length
+    }))
+  ];
 
   return (
     <SiteShell onNavigate={onNavigate}>
@@ -67,6 +84,23 @@ export default function SectionPage({ onNavigate, section }: SectionPageProps) {
           <h1 id="section-title">{sectionInfo.title}</h1>
           <p>{sectionInfo.description}</p>
         </section>
+
+        {section === 'archive' ? (
+          <div className="archive-filter" aria-label="Archive filters" role="group">
+            {archiveFilterOptions.map((option) => (
+              <button
+                aria-pressed={archiveFilter === option.id}
+                className="filter-chip"
+                key={option.id}
+                onClick={() => setArchiveFilter(option.id)}
+                type="button"
+              >
+                <span>{option.label}</span>
+                <small>{option.count}</small>
+              </button>
+            ))}
+          </div>
+        ) : null}
 
         {records.length > 0 ? (
           <div className="record-grid">

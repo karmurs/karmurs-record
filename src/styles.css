@@ -386,6 +386,53 @@ button {
   max-width: 720px;
 }
 
+.archive-filter {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: -10px 0 34px;
+}
+
+.filter-chip {
+  align-items: center;
+  background: transparent;
+  border: 1px solid rgba(246, 239, 227, 0.24);
+  border-radius: 999px;
+  color: rgba(246, 239, 227, 0.82);
+  cursor: pointer;
+  display: inline-flex;
+  gap: 9px;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0;
+  padding: 9px 13px;
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease;
+}
+
+.filter-chip small {
+  color: rgba(246, 239, 227, 0.58);
+  font-size: 0.7rem;
+  font-weight: 900;
+}
+
+.filter-chip:hover,
+.filter-chip:focus-visible,
+.filter-chip[aria-pressed="true"] {
+  background: #f6efe3;
+  border-color: #f6efe3;
+  color: #17110b;
+}
+
+.filter-chip:hover small,
+.filter-chip:focus-visible small,
+.filter-chip[aria-pressed="true"] small {
+  color: rgba(23, 17, 11, 0.58);
+}
+
 .record-grid {
   display: grid;
   gap: 16px;

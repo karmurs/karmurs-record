@@ -66,6 +66,26 @@ describe('Karmurs Record homepage', () => {
     expect(screen.getByRole('button', { name: /Devlog 카드 추가/i })).toBeInTheDocument();
   });
 
+  it('filters archive records by section type', async () => {
+    const user = userEvent.setup();
+    render(<App />);
+
+    const quickNav = screen.getByRole('navigation', { name: 'Quick record navigation' });
+    await user.click(within(quickNav).getByRole('button', { name: '기록함' }));
+
+    const filters = screen.getByRole('group', { name: 'Archive filters' });
+    await user.click(within(filters).getByRole('button', { name: /Devlog/i }));
+
+    expect(screen.getByRole('button', { name: /Devlog 카드 추가/i })).toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: /사이트 이름을 정한 날/i })).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: /첫 무드 보드/i })).not.toBeInTheDocument();
+
+    await user.click(within(filters).getByRole('button', { name: /^All\b/i }));
+
+    expect(screen.getByRole('button', { name: /사이트 이름을 정한 날/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Devlog 카드 추가/i })).toBeInTheDocument();
+  });
+
   it('opens a real record from the random discovery prompt', async () => {
     const user = userEvent.setup();
     render(<App />);

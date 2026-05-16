@@ -53,6 +53,8 @@ export const primarySections = [
   }
 ];
 
+export const publicRecordTypes = ['journal', 'gallery', 'racing', 'devlog'] as const;
+
 export const records: RecordEntry[] = [
   {
     id: 'journal-hello-record',
