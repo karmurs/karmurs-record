@@ -115,14 +115,13 @@ describe('Karmurs Record homepage', () => {
     const racingExplorer = screen.getByRole('region', { name: 'Racing records explorer' });
     expect(within(racingExplorer).getByRole('img', { name: 'Spa-Francorchamps track' }))
       .toBeInTheDocument();
-    expect(within(racingExplorer).getByRole('img', { name: 'BMW M4 GT3 car' })).toBeInTheDocument();
     expect(within(racingExplorer).getByText('Track photo')).toBeInTheDocument();
-    expect(within(racingExplorer).getByText('Car photo')).toBeInTheDocument();
-    expect(within(racingExplorer).getByRole('img', { name: 'Monza thumbnail' }))
-      .toBeInTheDocument();
-    expect(within(racingExplorer).getByRole('img', { name: 'Ferrari 296 GT3 thumbnail' }))
-      .toBeInTheDocument();
-    expect(within(racingExplorer).getByText('BMW')).toBeInTheDocument();
+    expect(within(racingExplorer).getByText('Car model')).toBeInTheDocument();
+    expect(within(racingExplorer).queryByRole('img', { name: 'Monza thumbnail' }))
+      .not.toBeInTheDocument();
+    expect(within(racingExplorer).queryByRole('img', { name: 'Ferrari 296 GT3 thumbnail' }))
+      .not.toBeInTheDocument();
+    expect(within(racingExplorer).getAllByText('BMW').length).toBeGreaterThan(1);
     expect(within(racingExplorer).getByRole('button', { name: /Assetto Corsa Competizione/i }))
       .toBeInTheDocument();
     expect(within(racingExplorer).getByRole('button', { name: /Assetto Corsa EVO/i }))

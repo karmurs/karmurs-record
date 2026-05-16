@@ -9,6 +9,8 @@ import {
 
 const sessionTypeLabels: SessionType[] = ['Practice', 'Qualifying', 'Race', 'Hotlap', 'Test'];
 
+const getBrandClass = (brand: string) => brand.toLowerCase().replace(/\s+/g, '-');
+
 export default function RacingExplorer() {
   const [selectedGameId, setSelectedGameId] = useState<RacingGameId>('acc');
   const [selectedMenuId, setSelectedMenuId] = useState<RacingMenuId>('sessions');
@@ -89,15 +91,19 @@ export default function RacingExplorer() {
             <strong>{selectedGame.shortTitle}</strong>
           </div>
           <div className="car-preview" aria-label={`${selectedGame.shortTitle} car preview`}>
-            {previewSession?.carImage ? (
-              <>
-                <img alt={`${previewSession.car} car`} src={previewSession.carImage} />
+            {previewSession ? (
+              <div className={`showcase-car brand-${getBrandClass(previewSession.carBadge)}`}>
+                <span className="showcase-car-roof" />
+                <span className="showcase-car-body" />
+                <span className="showcase-car-wing" />
+                <span className="showcase-wheel showcase-wheel-front" />
+                <span className="showcase-wheel showcase-wheel-rear" />
                 <span className="media-label">
-                  <small>Car photo</small>
+                  <small>Car model</small>
                   {previewSession.car}
                 </span>
                 <span className="car-badge">{previewSession.carBadge}</span>
-              </>
+              </div>
             ) : (
               <>
                 <span className="car-body" />
@@ -146,13 +152,15 @@ export default function RacingExplorer() {
             <div className="session-row" role="row" key={session.id}>
               <span>{session.date}</span>
               <strong className="session-media-cell">
-                {session.trackImage ? (
-                  <img alt={`${session.track} thumbnail`} src={session.trackImage} />
-                ) : null}
+                <span className={`track-layout-mini racing-accent-${selectedGame.accent}`} aria-hidden="true">
+                  <span />
+                </span>
                 <span>{session.track}</span>
               </strong>
               <span className="session-media-cell">
-                {session.carImage ? <img alt={`${session.car} thumbnail`} src={session.carImage} /> : null}
+                <span className={`brand-mark brand-${getBrandClass(session.carBadge)}`}>
+                  {session.carBadge}
+                </span>
                 <span>{session.car}</span>
               </span>
               <span className={`session-type session-${session.sessionType.toLowerCase()}`}>
