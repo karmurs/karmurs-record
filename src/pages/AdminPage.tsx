@@ -11,7 +11,7 @@ import {
   onAdminAuthChange,
   signInAdmin,
   signOutAdmin
-} from '../lib/adminAuth';
+} from '../lib/adminSession';
 
 type AdminPageProps = {
   onNavigate: (view: View) => void;

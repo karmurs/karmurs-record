@@ -22,7 +22,7 @@ import {
   type RecordEntry,
   type RecordType
 } from '../data/records';
-import { getAdminSession, isSupabaseConfigured, onAdminAuthChange } from '../lib/adminAuth';
+import { getAdminSession, isSupabaseConfigured, onAdminAuthChange } from '../lib/adminSession';
 import { deleteAdminRecord } from '../lib/adminRecords';
 import type { AdminRecordType } from '../lib/adminRecords';
 
