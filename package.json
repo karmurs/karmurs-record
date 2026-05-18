@@ -9,7 +9,7 @@
     "import:racing:watch": "node scripts/watch-racing-laps.mjs",
     "devlog:draft": "node scripts/generate-codex-daily-log.mjs",
     "devlog:upload-draft": "node scripts/upload-codex-daily-log-draft.mjs",
-    "build": "tsc -b && vite build",
+    "build": "tsc -b && vite build && node scripts/create-pages-spa-fallback.mjs",
     "preview": "vite preview",
     "test": "vitest run --passWithNoTests",
     "test:watch": "vitest"

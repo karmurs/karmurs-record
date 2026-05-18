@@ -32,6 +32,8 @@ Open the preview URL and confirm the homepage, section cards, archive, and detai
 The workflow at `.github/workflows/deploy.yml` will build the site and publish `dist/`.
 It intentionally fails before build if the Supabase values are missing, so the deployed site does not silently lose public records, images, or admin connectivity.
 
+The build also copies `dist/index.html` to `dist/404.html`. This lets GitHub Pages hand direct links such as `/admin` back to the React app instead of showing the default GitHub 404 page.
+
 Do not add `CODEX_DEVLOG_ADMIN_EMAIL` or `CODEX_DEVLOG_ADMIN_PASSWORD` to the Pages workflow. Those values are only for the local daily Devlog draft uploader or a separate trusted automation, never for the public frontend build.
 
 ## Netlify
