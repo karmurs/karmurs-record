@@ -183,8 +183,10 @@ button {
 }
 
 .primary-card-grid {
+  align-self: start;
   display: grid;
   gap: 14px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   min-width: 0;
   width: 100%;
 }
@@ -919,6 +921,261 @@ button {
   text-transform: uppercase;
 }
 
+.imported-racing-panel {
+  background: rgba(10, 9, 8, 0.46);
+  border: 1px solid rgba(246, 239, 227, 0.14);
+  border-radius: 8px;
+  display: grid;
+  gap: 16px;
+  margin-bottom: 18px;
+  padding: clamp(16px, 1.4vw, 22px);
+}
+
+.imported-racing-heading {
+  align-items: start;
+  display: flex;
+  gap: 16px;
+  justify-content: space-between;
+}
+
+.imported-racing-heading h3 {
+  color: #fff7ea;
+  font-size: clamp(1.35rem, 2.4vw, 2rem);
+  margin: 4px 0 0;
+}
+
+.imported-sync-time {
+  color: rgba(246, 239, 227, 0.56);
+  font-size: 0.78rem;
+  font-weight: 800;
+  margin: 6px 0 0;
+}
+
+.import-status {
+  border: 1px solid rgba(246, 239, 227, 0.16);
+  border-radius: 999px;
+  color: rgba(246, 239, 227, 0.72);
+  font-size: 0.7rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  padding: 8px 10px;
+  text-transform: uppercase;
+}
+
+.import-status-imported {
+  background: rgba(159, 178, 127, 0.18);
+  color: #dceabf;
+}
+
+.import-status-empty,
+.import-status-missing {
+  background: rgba(246, 239, 227, 0.08);
+}
+
+.import-status-error {
+  background: rgba(200, 101, 85, 0.2);
+  color: #f4c0b7;
+}
+
+.imported-source-statuses {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.import-source-pill {
+  border: 1px solid rgba(246, 239, 227, 0.14);
+  border-radius: 999px;
+  color: rgba(246, 239, 227, 0.68);
+  font-size: 0.68rem;
+  font-weight: 900;
+  padding: 7px 9px;
+  text-transform: uppercase;
+}
+
+.imported-summary-grid {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.imported-summary-card {
+  background: rgba(246, 239, 227, 0.08);
+  border: 1px solid rgba(246, 239, 227, 0.12);
+  border-radius: 8px;
+  display: grid;
+  gap: 3px;
+  min-width: 0;
+  padding: 14px;
+}
+
+.imported-summary-card strong {
+  color: #fff7ea;
+  font-size: 1.55rem;
+}
+
+.imported-summary-card span {
+  color: rgba(246, 239, 227, 0.58);
+  font-size: 0.72rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.imported-track-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.imported-chart-grid {
+  display: grid;
+  gap: 14px;
+  grid-template-columns: minmax(0, 1.1fr) minmax(280px, 0.9fr);
+}
+
+.imported-chart-card {
+  background: rgba(246, 239, 227, 0.06);
+  border: 1px solid rgba(246, 239, 227, 0.12);
+  border-radius: 8px;
+  display: grid;
+  gap: 12px;
+  min-height: 230px;
+  min-width: 0;
+  padding: 14px;
+}
+
+.imported-chart-title {
+  align-items: start;
+  display: flex;
+  gap: 12px;
+  justify-content: space-between;
+}
+
+.imported-chart-title strong {
+  color: #fff7ea;
+}
+
+.imported-chart-title span,
+.imported-trend-scale {
+  color: rgba(246, 239, 227, 0.58);
+  font-size: 0.74rem;
+  font-weight: 800;
+}
+
+.imported-bar-chart {
+  align-items: end;
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat(auto-fit, minmax(72px, 1fr));
+  min-height: 170px;
+}
+
+.imported-bar-column {
+  align-items: center;
+  display: grid;
+  gap: 7px;
+  grid-template-rows: auto minmax(90px, 1fr) auto;
+  min-width: 0;
+}
+
+.imported-bar-value {
+  color: #fff7ea;
+  font-size: 0.72rem;
+  font-weight: 900;
+}
+
+.imported-bar {
+  align-self: end;
+  background: linear-gradient(180deg, var(--accent, #c86555), rgba(246, 239, 227, 0.18));
+  border-radius: 999px 999px 4px 4px;
+  box-shadow: 0 0 0 1px rgba(246, 239, 227, 0.12) inset;
+  display: block;
+  min-height: 28px;
+  width: min(36px, 70%);
+}
+
+.imported-bar-column small {
+  color: rgba(246, 239, 227, 0.56);
+  font-size: 0.68rem;
+  font-weight: 800;
+  line-height: 1.25;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  text-align: center;
+}
+
+.imported-trend-chart {
+  background:
+    linear-gradient(rgba(246, 239, 227, 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(246, 239, 227, 0.08) 1px, transparent 1px);
+  background-size: 100% 25%, 25% 100%;
+  border-radius: 8px;
+  height: 142px;
+  overflow: visible;
+  width: 100%;
+}
+
+.imported-trend-chart polyline {
+  fill: none;
+  stroke: var(--accent, #c86555);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 4;
+}
+
+.imported-trend-scale {
+  display: flex;
+  justify-content: space-between;
+}
+
+.imported-best-table {
+  border: 1px solid rgba(246, 239, 227, 0.12);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.imported-best-row {
+  align-items: center;
+  border-top: 1px solid rgba(246, 239, 227, 0.1);
+  color: rgba(246, 239, 227, 0.72);
+  display: grid;
+  gap: 12px;
+  grid-template-columns: 1.05fr 1.4fr 0.72fr 0.72fr 0.42fr;
+  min-width: 0;
+  padding: 12px 14px;
+}
+
+.imported-best-row:first-child {
+  border-top: 0;
+}
+
+.imported-best-row-head {
+  background: rgba(246, 239, 227, 0.08);
+  color: rgba(246, 239, 227, 0.52);
+  font-size: 0.72rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.imported-best-row strong,
+.imported-best-row span {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.imported-best-row strong {
+  color: #fff7ea;
+}
+
+.imported-empty-state {
+  border: 1px dashed rgba(246, 239, 227, 0.18);
+  border-radius: 8px;
+  color: rgba(246, 239, 227, 0.68);
+  line-height: 1.7;
+  margin: 0;
+  padding: 14px;
+}
+
 .session-toolbar {
   display: flex;
   flex-wrap: wrap;
@@ -1348,6 +1605,10 @@ button {
     min-height: 138px;
   }
 
+  .primary-card-grid {
+    grid-template-columns: 1fr;
+  }
+
   .discovery-row,
   .record-grid {
     grid-template-columns: 1fr;
@@ -1361,6 +1622,19 @@ button {
   .racing-sidebar {
     border-bottom: 1px solid rgba(246, 239, 227, 0.12);
     border-right: 0;
+  }
+
+  .imported-summary-grid,
+  .imported-chart-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .imported-best-row {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .imported-best-row-head {
+    display: none;
   }
 
   .session-row {
@@ -1439,6 +1713,21 @@ button {
 
   .racing-stat {
     text-align: left;
+  }
+
+  .imported-racing-heading,
+  .imported-chart-title {
+    display: grid;
+  }
+
+  .imported-summary-grid,
+  .imported-chart-grid,
+  .imported-best-row {
+    grid-template-columns: 1fr;
+  }
+
+  .imported-bar-chart {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .session-row {

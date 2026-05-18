@@ -6,6 +6,15 @@ import {
   racingTrackCatalog
 } from '../data/racingCatalog';
 import {
+  buildBestLapsByTrack,
+  buildGameImportSummary,
+  formatImportedSnapshotTime,
+  getImportedLapsByGame,
+  getImportedTrackOptions,
+  getSelectedTrackTrend,
+  importedRacingLapsData
+} from '../data/importedRacingLaps';
+import {
   racingGames,
   racingSessions,
   type RacingGameId,
@@ -49,6 +58,7 @@ export default function RacingExplorer() {
   const [selectedGameId, setSelectedGameId] = useState<RacingGameId>('acc');
   const [selectedMenuId, setSelectedMenuId] = useState<RacingMenuId>('sessions');
   const [selectedSessionType, setSelectedSessionType] = useState<'All' | SessionType>('All');
+  const [selectedImportedTrack, setSelectedImportedTrack] = useState<'All' | string>('All');
 
   const selectedGame = racingGames.find((game) => game.id === selectedGameId) ?? racingGames[0];
   const gameSessions = racingSessions.filter((session) => session.gameId === selectedGame.id);
@@ -63,6 +73,47 @@ export default function RacingExplorer() {
   const previewSession = visibleSessions[0];
   const catalogTracks = racingTrackCatalog.filter((track) => track.gameId === selectedGame.id);
   const catalogCars = racingCarCatalog.filter((car) => car.gameId === selectedGame.id);
+  const importedSource = importedRacingLapsData.sources[selectedGame.id];
+  const importedSnapshotTime = formatImportedSnapshotTime(importedRacingLapsData.generatedAt);
+  const importedSourceStatuses = racingGames.map((game) => ({
+    game,
+    source: importedRacingLapsData.sources[game.id]
+  }));
+  const importedGameLaps = getImportedLapsByGame(importedRacingLapsData.laps, selectedGame.id);
+  const importedTrackOptions = getImportedTrackOptions(importedRacingLapsData.laps, selectedGame.id);
+  const importedSummary = buildGameImportSummary(
+    importedRacingLapsData.laps,
+    selectedGame.id,
+    importedSource?.sessionCount ?? 0
+  );
+  const importedBestLaps = buildBestLapsByTrack(
+    importedRacingLapsData.laps,
+    selectedGame.id,
+    selectedImportedTrack
+  );
+  const importedTrend = getSelectedTrackTrend(
+    importedRacingLapsData.laps,
+    selectedGame.id,
+    selectedImportedTrack
+  );
+  const visibleTrend = importedTrend.slice(-12);
+  const hasImportedLaps = importedGameLaps.length > 0;
+  const bestChartLaps = importedBestLaps.slice(0, 6);
+  const fastestBestLap = Math.min(...bestChartLaps.map((lap) => lap.bestLapMs));
+  const slowestBestLap = Math.max(...bestChartLaps.map((lap) => lap.bestLapMs));
+  const trendFastestLap = Math.min(...visibleTrend.map((lap) => lap.lapTimeMs));
+  const trendSlowestLap = Math.max(...visibleTrend.map((lap) => lap.lapTimeMs));
+  const trendPoints = visibleTrend
+    .map((lap, index) => {
+      const x = visibleTrend.length === 1 ? 50 : (index / (visibleTrend.length - 1)) * 100;
+      const y =
+        trendFastestLap === trendSlowestLap
+          ? 50
+          : 14 + ((lap.lapTimeMs - trendFastestLap) / (trendSlowestLap - trendFastestLap)) * 72;
+
+      return `${x},${y}`;
+    })
+    .join(' ');
 
   return (
     <section className="racing-explorer" aria-label="Racing records explorer">
@@ -82,6 +133,7 @@ export default function RacingExplorer() {
                   setSelectedGameId(game.id);
                   setSelectedMenuId('sessions');
                   setSelectedSessionType('All');
+                  setSelectedImportedTrack('All');
                 }}
                 type="button"
               >
@@ -97,6 +149,7 @@ export default function RacingExplorer() {
                     onClick={() => {
                       setSelectedGameId(game.id);
                       setSelectedMenuId(menu.id);
+                      setSelectedImportedTrack('All');
                     }}
                     type="button"
                   >
@@ -157,26 +210,181 @@ export default function RacingExplorer() {
                 ? catalogTracks.length
                 : selectedMenuId === 'cars'
                   ? catalogCars.length
-                  : gameSessions.length}
+                  : hasImportedLaps
+                    ? importedSummary.lapCount
+                    : gameSessions.length}
             </strong>
-            <span>{selectedMenuId === 'tracks' ? 'tracks' : selectedMenuId === 'cars' ? 'cars' : 'saved sessions'}</span>
+            <span>
+              {selectedMenuId === 'tracks'
+                ? 'tracks'
+                : selectedMenuId === 'cars'
+                  ? 'cars'
+                  : hasImportedLaps
+                    ? 'imported laps'
+                    : 'saved sessions'}
+            </span>
           </div>
         </header>
 
         {selectedMenuId === 'sessions' ? (
-          <div className="session-toolbar" aria-label="Session type filters" role="group">
-            {(['All', ...sessionTypeLabels] as const).map((type) => (
-              <button
-                aria-pressed={selectedSessionType === type}
-                className={`session-chip session-${type.toLowerCase()}`}
-                key={type}
-                onClick={() => setSelectedSessionType(type)}
-                type="button"
-              >
-                {type}
-              </button>
-            ))}
-          </div>
+          <>
+            <section
+              aria-label={`${selectedGame.title} imported racing records`}
+              className="imported-racing-panel"
+            >
+              <div className="imported-racing-heading">
+                <div>
+                  <p className="hero-kicker">Imported DeltaLine laps</p>
+                  <h3>Game DB sync</h3>
+                  <p className="imported-sync-time">Last sync {importedSnapshotTime}</p>
+                </div>
+                <span className={`import-status import-status-${importedSource?.status ?? 'missing'}`}>
+                  {importedSource?.status ?? 'missing'}
+                </span>
+              </div>
+
+              <div className="imported-source-statuses" aria-label="Racing import source statuses">
+                {importedSourceStatuses.map(({ game, source }) => (
+                  <span
+                    className={`import-source-pill import-status-${source?.status ?? 'missing'}`}
+                    key={game.id}
+                  >
+                    {game.shortTitle}: {source?.status ?? 'missing'}
+                  </span>
+                ))}
+              </div>
+
+              <div className="imported-summary-grid" aria-label="Imported racing summary">
+                <div className="imported-summary-card">
+                  <strong>{importedSummary.lapCount}</strong>
+                  <span>laps</span>
+                </div>
+                <div className="imported-summary-card">
+                  <strong>{importedSummary.sessionCount}</strong>
+                  <span>sessions</span>
+                </div>
+                <div className="imported-summary-card">
+                  <strong>{importedSummary.trackCount}</strong>
+                  <span>tracks</span>
+                </div>
+                <div className="imported-summary-card">
+                  <strong>{importedSummary.vehicleCount}</strong>
+                  <span>vehicles</span>
+                </div>
+              </div>
+
+              {hasImportedLaps ? (
+                <>
+                  <div className="imported-track-filters" aria-label="Imported track filters" role="group">
+                    <button
+                      aria-pressed={selectedImportedTrack === 'All'}
+                      className="session-chip"
+                      onClick={() => setSelectedImportedTrack('All')}
+                      type="button"
+                    >
+                      All courses
+                    </button>
+                    {importedTrackOptions.map((track) => (
+                      <button
+                        aria-pressed={selectedImportedTrack === track}
+                        className="session-chip"
+                        key={track}
+                        onClick={() => setSelectedImportedTrack(track)}
+                        type="button"
+                      >
+                        {track}
+                      </button>
+                    ))}
+                  </div>
+
+                  <div className="imported-chart-grid">
+                    <div className="imported-chart-card">
+                      <div className="imported-chart-title">
+                        <strong>Best lap by course</strong>
+                        <span>{selectedImportedTrack === 'All' ? 'All courses' : selectedImportedTrack}</span>
+                      </div>
+                      <div className="imported-bar-chart" aria-label="Track best lap chart" role="img">
+                        {bestChartLaps.map((lap) => {
+                          const height =
+                            fastestBestLap === slowestBestLap
+                              ? 72
+                              : 34 + ((slowestBestLap - lap.bestLapMs) / (slowestBestLap - fastestBestLap)) * 56;
+
+                          return (
+                            <div className="imported-bar-column" key={`${lap.track}-${lap.vehicle}`}>
+                              <span className="imported-bar-value">{lap.bestLap}</span>
+                              <span className="imported-bar" style={{ height: `${height}%` }} />
+                              <small>{lap.track}</small>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+
+                    <div className="imported-chart-card">
+                      <div className="imported-chart-title">
+                        <strong>Selected track trend</strong>
+                        <span>{visibleTrend.length} laps</span>
+                      </div>
+                      <svg
+                        aria-label="Selected track lap time trend"
+                        className="imported-trend-chart"
+                        role="img"
+                        viewBox="0 0 100 100"
+                      >
+                        <polyline points={trendPoints} />
+                      </svg>
+                      <div className="imported-trend-scale">
+                        <span>{visibleTrend[0]?.lapTime}</span>
+                        <span>{visibleTrend[visibleTrend.length - 1]?.lapTime}</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div
+                    className="imported-best-table"
+                    role="table"
+                    aria-label={`${selectedGame.title} imported best laps`}
+                  >
+                    <div className="imported-best-row imported-best-row-head" role="row">
+                      <span>Course</span>
+                      <span>Vehicle</span>
+                      <span>Class</span>
+                      <span>Best Lap</span>
+                      <span>Laps</span>
+                    </div>
+                    {importedBestLaps.map((lap) => (
+                      <div className="imported-best-row" role="row" key={`${lap.track}-${lap.vehicle}`}>
+                        <strong>{lap.track}</strong>
+                        <span>{lap.vehicle}</span>
+                        <span>{lap.vehicleClass}</span>
+                        <span>{lap.bestLap}</span>
+                        <span>{lap.lapCount}</span>
+                      </div>
+                    ))}
+                  </div>
+                </>
+              ) : (
+                <p className="imported-empty-state">
+                  아직 {selectedGame.shortTitle} DB에서 가져온 랩타임이 없습니다. 새 랩이 기록되면 import 명령으로 이 영역에 올라옵니다.
+                </p>
+              )}
+            </section>
+
+            <div className="session-toolbar" aria-label="Session type filters" role="group">
+              {(['All', ...sessionTypeLabels] as const).map((type) => (
+                <button
+                  aria-pressed={selectedSessionType === type}
+                  className={`session-chip session-${type.toLowerCase()}`}
+                  key={type}
+                  onClick={() => setSelectedSessionType(type)}
+                  type="button"
+                >
+                  {type}
+                </button>
+              ))}
+            </div>
+          </>
         ) : null}
 
         {selectedMenuId === 'tracks' ? (

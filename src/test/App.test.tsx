@@ -48,8 +48,8 @@ describe('Karmurs Record homepage', () => {
     await user.click(within(primaryCards).getByRole('button', { name: /Journal/i }));
     expect(screen.getByRole('heading', { name: 'Journal' })).toBeInTheDocument();
 
-    await user.click(screen.getByRole('button', { name: /사이트 이름을 정한 날/i }));
-    expect(screen.getByText(/흘려보내기 아까운 것들을 모아두는 공간/)).toBeInTheDocument();
+    await user.click(screen.getByRole('button', { name: /Karmurs' Record를 여는 기준/i }));
+    expect(screen.getByText(/짧은 생각, 오래 보고 싶은 문장/)).toBeInTheDocument();
   });
 
   it('opens the archive as an aggregate record list from quick navigation', async () => {
@@ -60,10 +60,10 @@ describe('Karmurs Record homepage', () => {
     await user.click(within(quickNav).getByRole('button', { name: '기록함' }));
 
     expect(screen.getByRole('heading', { name: 'Archive' })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /사이트 이름을 정한 날/i })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /첫 무드 보드/i })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /Racing 섹션 자리 잡기/i })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /Devlog 카드 추가/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Karmurs' Record를 여는 기준/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /첫 화면의 무드 보드/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Racing 기록장의 첫 구조/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Devlog를 메인에 남긴 이유/i })).toBeInTheDocument();
   });
 
   it('filters archive records by section type', async () => {
@@ -76,14 +76,14 @@ describe('Karmurs Record homepage', () => {
     const filters = screen.getByRole('group', { name: 'Archive filters' });
     await user.click(within(filters).getByRole('button', { name: /Devlog/i }));
 
-    expect(screen.getByRole('button', { name: /Devlog 카드 추가/i })).toBeInTheDocument();
-    expect(screen.queryByRole('button', { name: /사이트 이름을 정한 날/i })).not.toBeInTheDocument();
-    expect(screen.queryByRole('button', { name: /첫 무드 보드/i })).not.toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Devlog를 메인에 남긴 이유/i })).toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: /Karmurs' Record를 여는 기준/i })).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: /첫 화면의 무드 보드/i })).not.toBeInTheDocument();
 
     await user.click(within(filters).getByRole('button', { name: /^All\b/i }));
 
-    expect(screen.getByRole('button', { name: /사이트 이름을 정한 날/i })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /Devlog 카드 추가/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Karmurs' Record를 여는 기준/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Devlog를 메인에 남긴 이유/i })).toBeInTheDocument();
   });
 
   it('searches archive records across text and tags', async () => {
@@ -93,10 +93,10 @@ describe('Karmurs Record homepage', () => {
     const quickNav = screen.getByRole('navigation', { name: 'Quick record navigation' });
     await user.click(within(quickNav).getByRole('button', { name: '기록함' }));
 
-    await user.type(screen.getByLabelText('Search archive'), 'homepage');
+    await user.type(screen.getByLabelText('Search archive'), 'decision');
 
-    expect(screen.getByRole('button', { name: /Devlog 카드 추가/i })).toBeInTheDocument();
-    expect(screen.queryByRole('button', { name: /첫 무드 보드/i })).not.toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Devlog를 메인에 남긴 이유/i })).toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: /첫 화면의 무드 보드/i })).not.toBeInTheDocument();
 
     await user.clear(screen.getByLabelText('Search archive'));
     await user.type(screen.getByLabelText('Search archive'), 'nothing-matches-this');
@@ -143,14 +143,45 @@ describe('Karmurs Record homepage', () => {
     expect(within(racingExplorer).queryByText('Fuji Speedway')).not.toBeInTheDocument();
   });
 
+  it('shows imported racing laps by game and track', async () => {
+    const user = userEvent.setup();
+    render(<App />);
+
+    const primaryCards = screen.getByRole('navigation', { name: 'Primary record sections' });
+    await user.click(within(primaryCards).getByRole('button', { name: /Racing/i }));
+
+    const racingExplorer = screen.getByRole('region', { name: 'Racing records explorer' });
+    await user.click(within(racingExplorer).getByRole('button', { name: /Assetto Corsa EVO/i }));
+
+    const importedPanel = within(racingExplorer).getByRole('region', {
+      name: /Assetto Corsa EVO imported racing records/i
+    });
+    expect(within(importedPanel).getByText('Imported DeltaLine laps')).toBeInTheDocument();
+    expect(within(importedPanel).getByText(/Last sync/i)).toBeInTheDocument();
+    expect(
+      within(importedPanel).getByRole('generic', { name: 'Racing import source statuses' })
+    ).toBeInTheDocument();
+    expect(within(importedPanel).getAllByText('33').length).toBeGreaterThan(0);
+    expect(within(importedPanel).getByRole('button', { name: /Brands Hatch Indy/i })).toBeInTheDocument();
+
+    await user.click(within(importedPanel).getByRole('button', { name: /Brands Hatch Indy/i }));
+
+    const bestLaps = within(importedPanel).getByRole('table', {
+      name: /Assetto Corsa EVO imported best laps/i
+    });
+    expect(within(importedPanel).getByText('Selected track trend')).toBeInTheDocument();
+    expect(within(bestLaps).getByText('Hyundai i30 N Hatchback')).toBeInTheDocument();
+    expect(within(bestLaps).queryByText('Nurburgring 24h')).not.toBeInTheDocument();
+  });
+
   it('opens a real record from the random discovery prompt', async () => {
     const user = userEvent.setup();
     render(<App />);
 
     await user.click(screen.getByRole('button', { name: /random/i }));
 
-    expect(screen.getByRole('heading', { name: '첫 무드 보드' })).toBeInTheDocument();
-    expect(screen.getByText(/다크 에디토리얼과 손글씨 타이틀/)).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: '첫 화면의 무드 보드' })).toBeInTheDocument();
+    expect(screen.getByText(/설명보다 분위기로 기억되게 둔다/)).toBeInTheDocument();
   });
 
   it('supports browser back navigation between in-memory views', async () => {
