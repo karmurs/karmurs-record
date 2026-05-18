@@ -1,38 +1,53 @@
-import { useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import type { Session } from '@supabase/supabase-js';
 import type { View } from '../App';
+import AdminRecordForm from '../components/AdminRecordForm';
+import RacingSetupForm from '../components/RacingSetupForm';
 import RecordCard from '../components/RecordCard';
 import RacingExplorer from '../components/RacingExplorer';
+import RacingTuningGuidePanel from '../components/RacingTuningGuidePanel';
 import SiteShell from '../components/SiteShell';
+import type { RacingGameId } from '../data/racingRecords';
+import { fetchRemotePublicRecords, mergePublicRecords } from '../data/remoteRecords';
+import {
+  fetchPublicRacingSetups,
+  type RacingSetup,
+  type RacingSetupVisibility
+} from '../data/racingSetups';
 import {
   getPublicRecords,
   getRecordsByType,
   primarySections,
   publicRecordTypes,
+  type RecordEntry,
   type RecordType
 } from '../data/records';
+import { getAdminSession, isSupabaseConfigured, onAdminAuthChange } from '../lib/adminAuth';
+import { deleteAdminRecord } from '../lib/adminRecords';
+import type { AdminRecordType } from '../lib/adminRecords';
 
 type ArchiveFilter = 'all' | (typeof publicRecordTypes)[number];
 
 const sectionCopy: Record<RecordType, { title: string; description: string }> = {
   journal: {
     title: 'Journal',
-    description: '생각, 일기, 짧은 문장을 날짜별로 모아두는 공간.'
+    description: '하루의 생각과 다시 읽고 싶은 문장을 가볍게 남기는 공간.'
   },
   gallery: {
     title: 'Gallery',
-    description: '사진, 캡처, 분위기 이미지를 천천히 꺼내 보는 공간.'
+    description: '사진, 캡처, 장면처럼 말보다 먼저 남는 것들을 보관하는 공간.'
   },
   racing: {
     title: 'Racing',
-    description: '랩타임, 세션, 트랙 메모를 기록하는 공간.'
+    description: 'ACC, ACE, LMU의 랩타임과 셋업 메모를 트랙별로 정리하는 공간.'
   },
   devlog: {
     title: 'Devlog',
-    description: '홈페이지 제작 과정, 수정 기록, 다음 아이디어를 남기는 개발일지.'
+    description: '홈페이지와 개인 도구가 어떻게 바뀌었는지 남기는 업데이트 기록.'
   },
   archive: {
     title: 'Archive',
-    description: '글, 사진, 파일, 링크를 오래 보관하는 기록함.'
+    description: '글, 사진, 링크, 작업 기록을 한 번에 다시 찾기 위한 기록함.'
   },
   project: {
     title: 'Project',
@@ -52,8 +67,27 @@ type SectionPageProps = {
 export default function SectionPage({ onNavigate, section }: SectionPageProps) {
   const [archiveFilter, setArchiveFilter] = useState<ArchiveFilter>('all');
   const [archiveQuery, setArchiveQuery] = useState('');
+  const [remoteRecords, setRemoteRecords] = useState<RecordEntry[]>([]);
+  const [remoteError, setRemoteError] = useState<string | null>(null);
+  const [session, setSession] = useState<Session | null>(null);
+  const [isComposerOpen, setIsComposerOpen] = useState(false);
+  const [editingRecord, setEditingRecord] = useState<RecordEntry | null>(null);
+  const [recordActionStatus, setRecordActionStatus] = useState('');
+  const [isSetupFormOpen, setIsSetupFormOpen] = useState(false);
+  const [setupPageFocus, setSetupPageFocus] = useState<{
+    focusNewest: boolean;
+    game: RacingGameId;
+    nonce: number;
+  } | null>(null);
+  const [racingSetups, setRacingSetups] = useState<RacingSetup[]>([]);
+  const [racingSetupsError, setRacingSetupsError] = useState<string | null>(null);
   const sectionInfo = sectionCopy[section];
-  const archiveRecords = getPublicRecords();
+  const canWriteInSection = publicRecordTypes.includes(section as (typeof publicRecordTypes)[number]);
+  const publicRecords = useMemo(
+    () => mergePublicRecords(getPublicRecords(), remoteRecords),
+    [remoteRecords]
+  );
+  const archiveRecords = publicRecords;
   const normalizedQuery = archiveQuery.trim().toLocaleLowerCase();
   const records =
     section === 'archive'
@@ -71,7 +105,10 @@ export default function SectionPage({ onNavigate, section }: SectionPageProps) {
 
           return matchesFilter && (!normalizedQuery || searchableText.includes(normalizedQuery));
         })
-      : getRecordsByType(section);
+      : mergePublicRecords(
+          getRecordsByType(section),
+          remoteRecords.filter((record) => record.type === section)
+        );
   const primarySection = primarySections.find((item) => item.id === section);
   const archiveFilterOptions = [
     { id: 'all' as const, label: 'All', count: archiveRecords.length },
@@ -81,6 +118,123 @@ export default function SectionPage({ onNavigate, section }: SectionPageProps) {
       count: archiveRecords.filter((record) => record.type === type).length
     }))
   ];
+  const refreshRemoteRecords = useCallback(async () => {
+    const result = await fetchRemotePublicRecords();
+    setRemoteRecords(result.records);
+    setRemoteError(result.error);
+  }, []);
+  const refreshRacingSetups = useCallback(async () => {
+    const result = await fetchPublicRacingSetups();
+    setRacingSetups(result.setups);
+    setRacingSetupsError(result.error);
+  }, []);
+  const handleRacingSetupSaved = useCallback(
+    async (savedSetup: { game: RacingGameId; visibility: RacingSetupVisibility }) => {
+      await refreshRacingSetups();
+
+      if (savedSetup.visibility === 'public') {
+        setSetupPageFocus({ focusNewest: true, game: savedSetup.game, nonce: Date.now() });
+        setIsSetupFormOpen(false);
+      }
+    },
+    [refreshRacingSetups]
+  );
+  const handleRemoteRecordDeleted = useCallback(
+    async (record: RecordEntry) => {
+      const recordId = record.id.startsWith('remote:') ? record.id.replace('remote:', '') : null;
+
+      if (!recordId) {
+        return;
+      }
+
+      const shouldDelete = window.confirm(`"${record.title}" 글을 삭제할까요?`);
+
+      if (!shouldDelete) {
+        return;
+      }
+
+      setRecordActionStatus('');
+      const result = await deleteAdminRecord(recordId);
+
+      if (result.error) {
+        setRecordActionStatus(result.error);
+        return;
+      }
+
+      if (editingRecord?.id === record.id) {
+        setEditingRecord(null);
+      }
+      await refreshRemoteRecords();
+      setRecordActionStatus('Record deleted.');
+    },
+    [editingRecord, refreshRemoteRecords]
+  );
+
+  useEffect(() => {
+    let isMounted = true;
+
+    fetchRemotePublicRecords().then((result) => {
+      if (!isMounted) {
+        return;
+      }
+
+      setRemoteRecords(result.records);
+      setRemoteError(result.error);
+    });
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    if (!isSupabaseConfigured) {
+      return undefined;
+    }
+
+    getAdminSession().then((result) => {
+      if (isMounted) {
+        setSession(result.session);
+      }
+    });
+
+    const unsubscribe = onAdminAuthChange((nextSession) => {
+              setSession(nextSession);
+              if (!nextSession) {
+                setIsComposerOpen(false);
+                setEditingRecord(null);
+                setIsSetupFormOpen(false);
+              }
+    });
+
+    return () => {
+      isMounted = false;
+      unsubscribe();
+    };
+  }, []);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    if (section !== 'racing') {
+      return undefined;
+    }
+
+    fetchPublicRacingSetups().then((result) => {
+      if (!isMounted) {
+        return;
+      }
+
+      setRacingSetups(result.setups);
+      setRacingSetupsError(result.error);
+    });
+
+    return () => {
+      isMounted = false;
+    };
+  }, [section]);
 
   return (
     <SiteShell onNavigate={onNavigate}>
@@ -100,6 +254,41 @@ export default function SectionPage({ onNavigate, section }: SectionPageProps) {
           <h1 id="section-title">{sectionInfo.title}</h1>
           <p>{sectionInfo.description}</p>
         </section>
+
+        {session && canWriteInSection ? (
+          <section className="inline-compose" aria-label="Inline record composer">
+            <button
+              aria-expanded={isComposerOpen}
+              className="admin-compose-toggle"
+              onClick={() => setIsComposerOpen((current) => !current)}
+              type="button"
+            >
+              {isComposerOpen ? '작성 닫기' : `${sectionInfo.title} 새 글 작성`}
+            </button>
+            {isComposerOpen ? (
+              <AdminRecordForm
+                initialType={section as AdminRecordType}
+                onSaved={refreshRemoteRecords}
+                userId={session.user.id}
+              />
+            ) : null}
+          </section>
+        ) : null}
+
+        {session && editingRecord ? (
+          <section className="inline-compose" aria-label="Inline record editor">
+            <AdminRecordForm
+              initialRecord={editingRecord}
+              onCancel={() => setEditingRecord(null)}
+              onSaved={async () => {
+                setEditingRecord(null);
+                await refreshRemoteRecords();
+                setRecordActionStatus('Record updated.');
+              }}
+              userId={session.user.id}
+            />
+          </section>
+        ) : null}
 
         {section === 'archive' ? (
           <div className="archive-tools">
@@ -129,12 +318,52 @@ export default function SectionPage({ onNavigate, section }: SectionPageProps) {
           </div>
         ) : null}
 
+        {remoteError ? (
+          <p className="remote-record-status">Supabase records could not be loaded: {remoteError}</p>
+        ) : null}
+        {recordActionStatus ? <p className="admin-status">{recordActionStatus}</p> : null}
+
         {section === 'racing' ? (
-          <RacingExplorer />
+          <>
+            {session ? (
+              <section className="inline-compose" aria-label="Inline racing setup composer">
+                <button
+                  aria-expanded={isSetupFormOpen}
+                  className="admin-compose-toggle"
+                  onClick={() => setIsSetupFormOpen((current) => !current)}
+                  type="button"
+                >
+                  {isSetupFormOpen ? '셋업 입력 닫기' : '차량 셋업 입력'}
+                </button>
+                {isSetupFormOpen ? (
+                  <RacingSetupForm onSaved={handleRacingSetupSaved} userId={session.user.id} />
+                ) : null}
+              </section>
+            ) : null}
+            <RacingTuningGuidePanel />
+            <RacingExplorer
+              adminUserId={session?.user.id}
+              focusSetupPage={setupPageFocus}
+              onRacingSetupsChanged={refreshRacingSetups}
+              racingSetups={racingSetups}
+              racingSetupsError={racingSetupsError}
+            />
+          </>
         ) : records.length > 0 ? (
           <div className="record-grid">
             {records.map((record) => (
-              <RecordCard key={record.id} onNavigate={onNavigate} record={record} />
+              <RecordCard
+                canManage={Boolean(session)}
+                key={record.id}
+                onDelete={(targetRecord) => void handleRemoteRecordDeleted(targetRecord)}
+                onEdit={(targetRecord) => {
+                  setRecordActionStatus('');
+                  setEditingRecord(targetRecord);
+                  setIsComposerOpen(false);
+                }}
+                onNavigate={onNavigate}
+                record={record}
+              />
             ))}
           </div>
         ) : (

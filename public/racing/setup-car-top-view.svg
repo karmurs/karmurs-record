@@ -1,0 +1,156 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 940" role="img" aria-label="GT3 race car top view">
+  <defs>
+    <linearGradient id="bodyPaint" x1="0" x2="1" y1="0" y2="0">
+      <stop offset="0" stop-color="#050606"/>
+      <stop offset=".06" stop-color="#111312"/>
+      <stop offset=".15" stop-color="#333735"/>
+      <stop offset=".27" stop-color="#8e928b"/>
+      <stop offset=".39" stop-color="#c2c5bc"/>
+      <stop offset=".5" stop-color="#777d76"/>
+      <stop offset=".61" stop-color="#c4c8bf"/>
+      <stop offset=".73" stop-color="#91958e"/>
+      <stop offset=".85" stop-color="#303432"/>
+      <stop offset=".94" stop-color="#111312"/>
+      <stop offset="1" stop-color="#050606"/>
+    </linearGradient>
+    <linearGradient id="centerPanel" x1="0" x2="1" y1="0" y2="0">
+      <stop offset="0" stop-color="#242927"/>
+      <stop offset=".2" stop-color="#7f857d"/>
+      <stop offset=".5" stop-color="#d0d4cc"/>
+      <stop offset=".8" stop-color="#7a8078"/>
+      <stop offset="1" stop-color="#242927"/>
+    </linearGradient>
+    <linearGradient id="carbon" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#0d0f10"/>
+      <stop offset=".45" stop-color="#010202"/>
+      <stop offset="1" stop-color="#171a1a"/>
+    </linearGradient>
+    <linearGradient id="glass" x1="0" x2="0" y1="0" y2="1">
+      <stop offset="0" stop-color="#8c9792" stop-opacity=".62"/>
+      <stop offset=".18" stop-color="#202929" stop-opacity=".92"/>
+      <stop offset=".68" stop-color="#071012" stop-opacity=".96"/>
+      <stop offset="1" stop-color="#9aa39e" stop-opacity=".54"/>
+    </linearGradient>
+    <linearGradient id="glassFlash" x1="0" x2="1" y1="0" y2="0">
+      <stop offset="0" stop-color="#fff" stop-opacity="0"/>
+      <stop offset=".42" stop-color="#fff" stop-opacity=".28"/>
+      <stop offset=".55" stop-color="#fff" stop-opacity=".08"/>
+      <stop offset="1" stop-color="#fff" stop-opacity="0"/>
+    </linearGradient>
+    <radialGradient id="hoodLight" cx="50%" cy="13%" r="46%">
+      <stop offset="0" stop-color="#eef1e7" stop-opacity=".48"/>
+      <stop offset=".5" stop-color="#d9ddd3" stop-opacity=".14"/>
+      <stop offset="1" stop-color="#000" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="carShadow" x="-25%" y="-18%" width="150%" height="142%">
+      <feDropShadow dx="0" dy="28" flood-color="#000" flood-opacity=".82" stdDeviation="18"/>
+    </filter>
+    <pattern id="carbonWeave" width="12" height="12" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+      <rect width="12" height="12" fill="#050707"/>
+      <rect width="6" height="12" fill="#0d1111" opacity=".75"/>
+    </pattern>
+  </defs>
+
+  <rect width="520" height="940" fill="none"/>
+  <ellipse cx="260" cy="486" rx="210" ry="398" fill="#000" opacity=".52"/>
+  <ellipse cx="260" cy="486" rx="138" ry="348" fill="#e8efe8" opacity=".055"/>
+
+  <g filter="url(#carShadow)">
+    <path fill="url(#carbon)" stroke="#d4d7ce" stroke-opacity=".18" stroke-width="2"
+      d="M95 102 L425 102 L444 162 L76 162Z"/>
+    <path fill="url(#carbonWeave)" opacity=".92"
+      d="M110 113 L410 113 L421 150 L99 150Z"/>
+    <path d="M72 174 L118 145 L160 152 L118 210 L72 213Z" fill="url(#carbon)" stroke="#d4d7ce" stroke-opacity=".15"/>
+    <path d="M448 174 L402 145 L360 152 L402 210 L448 213Z" fill="url(#carbon)" stroke="#d4d7ce" stroke-opacity=".15"/>
+
+    <path fill="url(#bodyPaint)" stroke="#d9dcd2" stroke-opacity=".34" stroke-width="2.4"
+      d="M260 52
+         C219 53 190 74 177 118
+         C165 159 148 207 123 272
+         C103 325 95 414 98 508
+         C102 637 132 760 166 842
+         C190 898 220 917 260 922
+         C300 917 330 898 354 842
+         C388 760 418 637 422 508
+         C425 414 417 325 397 272
+         C372 207 355 159 343 118
+         C330 74 301 53 260 52Z"/>
+
+    <path fill="#0b0d0d" opacity=".92"
+      d="M105 287 C62 364 50 524 63 668 C70 742 84 807 102 859 L143 842 C117 762 100 640 98 513 C96 420 100 341 105 287Z"/>
+    <path fill="#0b0d0d" opacity=".92"
+      d="M415 287 C458 364 470 524 457 668 C450 742 436 807 418 859 L377 842 C403 762 420 640 422 513 C424 420 420 341 415 287Z"/>
+
+    <path fill="url(#centerPanel)" stroke="#f6efe3" stroke-opacity=".16" stroke-width="1.5"
+      d="M260 73
+         C228 76 207 112 198 171
+         C184 264 171 384 169 516
+         C167 639 183 763 205 856
+         C218 889 239 906 260 908
+         C281 906 302 889 315 856
+         C337 763 353 639 351 516
+         C349 384 336 264 322 171
+         C313 112 292 76 260 73Z"/>
+
+    <path fill="url(#hoodLight)" d="M187 100 C220 61 300 61 333 100 L354 231 C323 205 292 191 260 191 C228 191 197 205 166 231Z"/>
+
+    <path fill="#050606" stroke="#d9dcd2" stroke-opacity=".12"
+      d="M169 174 C143 203 127 249 120 303 C151 293 170 251 181 182Z"/>
+    <path fill="#050606" stroke="#d9dcd2" stroke-opacity=".12"
+      d="M351 174 C377 203 393 249 400 303 C369 293 350 251 339 182Z"/>
+    <path fill="#111514" opacity=".82" stroke="#f6efe3" stroke-opacity=".14"
+      d="M222 178 L196 324 L244 300Z"/>
+    <path fill="#111514" opacity=".82" stroke="#f6efe3" stroke-opacity=".14"
+      d="M298 178 L324 324 L276 300Z"/>
+    <path fill="#020303" opacity=".9"
+      d="M143 266 C123 313 113 389 112 463 L143 451 C148 371 158 314 181 273Z"/>
+    <path fill="#020303" opacity=".9"
+      d="M377 266 C397 313 407 389 408 463 L377 451 C372 371 362 314 339 273Z"/>
+
+    <path fill="url(#glass)" stroke="#edf1e8" stroke-opacity=".32" stroke-width="2.2"
+      d="M181 356
+         C205 315 230 299 260 299
+         C290 299 315 315 339 356
+         L323 506
+         C281 479 239 479 197 506Z"/>
+    <path fill="url(#glassFlash)" opacity=".74"
+      d="M198 365 C216 330 239 313 260 311 L254 490 C232 489 214 496 197 507Z"/>
+    <text x="260" y="421" fill="#f6efe3" opacity=".82" font-family="Arial, sans-serif" font-size="19" font-weight="900" letter-spacing="1.3" text-anchor="middle" transform="rotate(180 260 421)">GT3</text>
+
+    <path fill="#696f6a" opacity=".64" stroke="#f6efe3" stroke-opacity=".16"
+      d="M196 520 C238 494 282 494 324 520 L315 704 C280 689 240 689 205 704Z"/>
+    <path fill="#313836" opacity=".68" stroke="#f6efe3" stroke-opacity=".14"
+      d="M204 726 L316 726 L338 828 L182 828Z"/>
+    <path d="M210 743 L310 812 M310 743 L210 812" fill="none" stroke="#f6efe3" stroke-opacity=".34" stroke-width="3"/>
+
+    <path d="M260 74 L260 902" fill="none" stroke="#fff" stroke-opacity=".22" stroke-width="1.7"/>
+    <path d="M197 351 C230 368 290 368 323 351" fill="none" stroke="#fff" stroke-opacity=".17" stroke-width="2"/>
+    <path d="M204 711 C232 697 288 697 316 711" fill="none" stroke="#fff" stroke-opacity=".18" stroke-width="2"/>
+
+    <path d="M151 329 C135 449 144 691 184 850" fill="none" stroke="url(#glassFlash)" stroke-linecap="round" stroke-width="14" opacity=".55"/>
+    <path d="M369 329 C385 449 376 691 336 850" fill="none" stroke="url(#glassFlash)" stroke-linecap="round" stroke-width="14" opacity=".55"/>
+
+    <path fill="url(#carbon)" stroke="#f6efe3" stroke-opacity=".14"
+      d="M154 839 L366 839 L392 904 L128 904Z"/>
+    <path fill="#2e3332" stroke="#d9dcd2" stroke-opacity=".25" stroke-width="2"
+      d="M103 846 L417 846 L432 908 L88 908Z"/>
+    <rect x="123" y="858" width="274" height="7" fill="#828783" opacity=".46"/>
+    <path d="M137 902 L383 902" stroke="#050606" stroke-opacity=".72" stroke-width="8"/>
+  </g>
+
+  <g opacity=".99">
+    <rect x="40" y="288" width="58" height="158" rx="18" fill="#020303" stroke="#e7eadf" stroke-opacity=".32" stroke-width="3.2"/>
+    <rect x="422" y="288" width="58" height="158" rx="18" fill="#020303" stroke="#e7eadf" stroke-opacity=".32" stroke-width="3.2"/>
+    <rect x="33" y="626" width="62" height="170" rx="19" fill="#020303" stroke="#e7eadf" stroke-opacity=".32" stroke-width="3.2"/>
+    <rect x="425" y="626" width="62" height="170" rx="19" fill="#020303" stroke="#e7eadf" stroke-opacity=".32" stroke-width="3.2"/>
+    <path d="M55 314 L87 421 M433 314 L465 421 M49 653 L84 774 M436 653 L471 774" stroke="#fff" stroke-opacity=".12" stroke-width="3.2"/>
+    <path d="M94 294 L125 330 M426 294 L395 330 M92 786 L132 758 M428 786 L388 758" stroke="#d9dcd2" stroke-opacity=".22" stroke-width="2"/>
+  </g>
+
+  <g fill="url(#carbon)" stroke="#d4d7ce" stroke-opacity=".14">
+    <path d="M64 188 L143 182 L127 222 L57 232Z"/>
+    <path d="M456 188 L377 182 L393 222 L463 232Z"/>
+    <path d="M56 234 L119 232 L108 260 L51 267Z"/>
+    <path d="M464 234 L401 232 L412 260 L469 267Z"/>
+  </g>
+</svg>

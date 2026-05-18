@@ -1,11 +1,13 @@
 import { useCallback, useEffect, useState } from 'react';
 import type { RecordType } from './data/records';
+import AdminPage from './pages/AdminPage';
 import HomePage from './pages/HomePage';
 import RecordDetailPage from './pages/RecordDetailPage';
 import SectionPage from './pages/SectionPage';
 
 export type View =
   | { name: 'home' }
+  | { name: 'admin' }
   | { name: 'section'; section: RecordType }
   | { name: 'detail'; recordId: string };
 
@@ -15,7 +17,20 @@ type HistoryState = {
 
 function getInitialView(): View {
   const state = window.history.state as HistoryState | null;
+
+  if (window.location.pathname.endsWith('/admin')) {
+    return { name: 'admin' };
+  }
+
   return state?.view ?? { name: 'home' };
+}
+
+function getUrlForView(view: View) {
+  if (view.name === 'admin') {
+    return '/admin';
+  }
+
+  return '/';
 }
 
 export default function App() {
@@ -37,8 +52,12 @@ export default function App() {
 
   const navigate = useCallback((nextView: View) => {
     setView(nextView);
-    window.history.pushState({ view: nextView }, '', window.location.href);
+    window.history.pushState({ view: nextView }, '', getUrlForView(nextView));
   }, []);
+
+  if (view.name === 'admin') {
+    return <AdminPage onNavigate={navigate} />;
+  }
 
   if (view.name === 'section') {
     return <SectionPage onNavigate={navigate} section={view.section} />;

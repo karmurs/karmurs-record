@@ -7,12 +7,15 @@
     "dev": "vite",
     "import:racing": "node scripts/import-racing-laps.mjs",
     "import:racing:watch": "node scripts/watch-racing-laps.mjs",
+    "devlog:draft": "node scripts/generate-codex-daily-log.mjs",
+    "devlog:upload-draft": "node scripts/upload-codex-daily-log-draft.mjs",
     "build": "tsc -b && vite build",
     "preview": "vite preview",
     "test": "vitest run --passWithNoTests",
     "test:watch": "vitest"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.105.4",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   },

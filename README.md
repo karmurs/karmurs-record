@@ -23,6 +23,10 @@ npm install
 npm run dev
 ```
 
+For Supabase-backed admin features, copy `.env.example` to `.env.local` and fill only the frontend-safe Supabase URL and anon key. See `docs/supabase.md`.
+
+The admin shell is available at `/admin`. Without local Supabase env values it shows a setup notice instead of enabling sign-in.
+
 ## Verification
 
 ```bash
@@ -45,6 +49,34 @@ npm run import:racing:watch
 ```
 
 The watcher performs an initial import, then regenerates the JSON snapshot when one of the source DB files changes.
+
+## Devlog Drafts
+
+Create a public-safe daily Codex work draft with:
+
+```bash
+npm run devlog:draft
+```
+
+The draft is written to `content/devlog/YYYY-MM-DD.md` with `draft: true`. It summarizes Git commits,
+changed files, and verification notes while filtering obvious secret/env/token lines. This is the safe
+draft stage before any future automatic Supabase upload.
+
+Upload that markdown draft into the admin `records` table as a Devlog draft with:
+
+```bash
+npm run devlog:upload-draft
+```
+
+This uses the local admin login values in `.env.local`:
+
+```text
+CODEX_DEVLOG_ADMIN_EMAIL=
+CODEX_DEVLOG_ADMIN_PASSWORD=
+```
+
+It signs in with the normal Supabase anon key and admin account, then upserts `codex-daily-YYYY-MM-DD`
+as `type=devlog` and `visibility=draft`. It does not publish the post.
 
 ## Deployment
 

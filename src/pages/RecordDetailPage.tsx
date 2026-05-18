@@ -1,6 +1,9 @@
+import { useEffect, useState } from 'react';
 import type { View } from '../App';
 import SiteShell from '../components/SiteShell';
+import { fetchRemotePublicRecords } from '../data/remoteRecords';
 import { getRecordById } from '../data/records';
+import type { RecordEntry } from '../data/records';
 
 type RecordDetailPageProps = {
   onNavigate: (view: View) => void;
@@ -8,7 +11,28 @@ type RecordDetailPageProps = {
 };
 
 export default function RecordDetailPage({ onNavigate, recordId }: RecordDetailPageProps) {
-  const record = getRecordById(recordId);
+  const [remoteRecord, setRemoteRecord] = useState<RecordEntry | null>(null);
+  const record = getRecordById(recordId) ?? remoteRecord;
+
+  useEffect(() => {
+    let isMounted = true;
+
+    if (!recordId.startsWith('remote:')) {
+      return undefined;
+    }
+
+    fetchRemotePublicRecords().then((result) => {
+      if (!isMounted) {
+        return;
+      }
+
+      setRemoteRecord(result.records.find((item) => item.id === recordId) ?? null);
+    });
+
+    return () => {
+      isMounted = false;
+    };
+  }, [recordId]);
 
   if (!record) {
     return (
@@ -52,15 +76,24 @@ export default function RecordDetailPage({ onNavigate, recordId }: RecordDetailP
         </div>
 
         <article className="detail-panel">
-          <p className="hero-kicker">{record.type}</p>
-          <time dateTime={record.date}>{record.date}</time>
-          <h1>{record.title}</h1>
-          <p className="detail-summary">{record.summary}</p>
-          <p>{record.body}</p>
-          <div className="tag-row" aria-label="Record tags">
-            {record.tags.map((tag) => (
-              <span key={tag}>{tag}</span>
-            ))}
+          <div className="detail-meta">
+            <p className="hero-kicker">{record.type}</p>
+            <time dateTime={record.date}>{record.date}</time>
+          </div>
+          {record.coverImageUrl ? (
+            <figure className="detail-cover-image">
+              <img alt={record.coverImageAlt ?? record.title} src={record.coverImageUrl} />
+            </figure>
+          ) : null}
+          <div className="detail-content">
+            <h1>{record.title}</h1>
+            <p className="detail-summary">{record.summary}</p>
+            <p className="detail-body">{record.body}</p>
+            <div className="tag-row" aria-label="Record tags">
+              {record.tags.map((tag) => (
+                <span key={tag}>{tag}</span>
+              ))}
+            </div>
           </div>
         </article>
       </main>

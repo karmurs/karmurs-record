@@ -19,3 +19,4 @@ They are not official game, manufacturer, or series logos.
 | `public/racing/brands/ferrari.svg` | [Simple Icons Ferrari](https://simpleicons.org/?q=ferrari) | Simple Icons contributors | CC0 1.0, trademark rights reserved by owner |
 | `public/racing/brands/porsche.svg` | [Simple Icons Porsche](https://simpleicons.org/?q=porsche) | Simple Icons contributors | CC0 1.0, trademark rights reserved by owner |
 | `public/racing/brands/*.svg` | [Simple Icons](https://simpleicons.org/) brand icons | Simple Icons contributors | CC0 1.0, trademark rights reserved by each owner |
+| `public/racing/setup-car-top-view.svg` | Project-local vector drawing | Karmurs' Record project | Project asset |

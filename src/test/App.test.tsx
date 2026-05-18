@@ -48,8 +48,8 @@ describe('Karmurs Record homepage', () => {
     await user.click(within(primaryCards).getByRole('button', { name: /Journal/i }));
     expect(screen.getByRole('heading', { name: 'Journal' })).toBeInTheDocument();
 
-    await user.click(screen.getByRole('button', { name: /Karmurs' Record를 여는 기준/i }));
-    expect(screen.getByText(/짧은 생각, 오래 보고 싶은 문장/)).toBeInTheDocument();
+    await user.click(screen.getByRole('button', { name: /기록을 남기는 방식/i }));
+    expect(screen.getByText(/완성된 글만 모으기보다/)).toBeInTheDocument();
   });
 
   it('opens the archive as an aggregate record list from quick navigation', async () => {
@@ -60,10 +60,10 @@ describe('Karmurs Record homepage', () => {
     await user.click(within(quickNav).getByRole('button', { name: '기록함' }));
 
     expect(screen.getByRole('heading', { name: 'Archive' })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /Karmurs' Record를 여는 기준/i })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /첫 화면의 무드 보드/i })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /Racing 기록장의 첫 구조/i })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /Devlog를 메인에 남긴 이유/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /기록을 남기는 방식/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /남겨둔 장면들/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /랩타임 노트/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /업데이트 기록/i })).toBeInTheDocument();
   });
 
   it('filters archive records by section type', async () => {
@@ -76,14 +76,14 @@ describe('Karmurs Record homepage', () => {
     const filters = screen.getByRole('group', { name: 'Archive filters' });
     await user.click(within(filters).getByRole('button', { name: /Devlog/i }));
 
-    expect(screen.getByRole('button', { name: /Devlog를 메인에 남긴 이유/i })).toBeInTheDocument();
-    expect(screen.queryByRole('button', { name: /Karmurs' Record를 여는 기준/i })).not.toBeInTheDocument();
-    expect(screen.queryByRole('button', { name: /첫 화면의 무드 보드/i })).not.toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /업데이트 기록/i })).toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: /기록을 남기는 방식/i })).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: /남겨둔 장면들/i })).not.toBeInTheDocument();
 
     await user.click(within(filters).getByRole('button', { name: /^All\b/i }));
 
-    expect(screen.getByRole('button', { name: /Karmurs' Record를 여는 기준/i })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /Devlog를 메인에 남긴 이유/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /기록을 남기는 방식/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /업데이트 기록/i })).toBeInTheDocument();
   });
 
   it('searches archive records across text and tags', async () => {
@@ -93,10 +93,10 @@ describe('Karmurs Record homepage', () => {
     const quickNav = screen.getByRole('navigation', { name: 'Quick record navigation' });
     await user.click(within(quickNav).getByRole('button', { name: '기록함' }));
 
-    await user.type(screen.getByLabelText('Search archive'), 'decision');
+    await user.type(screen.getByLabelText('Search archive'), 'update');
 
-    expect(screen.getByRole('button', { name: /Devlog를 메인에 남긴 이유/i })).toBeInTheDocument();
-    expect(screen.queryByRole('button', { name: /첫 화면의 무드 보드/i })).not.toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /업데이트 기록/i })).toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: /남겨둔 장면들/i })).not.toBeInTheDocument();
 
     await user.clear(screen.getByLabelText('Search archive'));
     await user.type(screen.getByLabelText('Search archive'), 'nothing-matches-this');
@@ -174,14 +174,44 @@ describe('Karmurs Record homepage', () => {
     expect(within(bestLaps).queryByText('Nurburgring 24h')).not.toBeInTheDocument();
   });
 
+  it('shows the racing setup panel inside the selected game Setups page', async () => {
+    const user = userEvent.setup();
+    render(<App />);
+
+    const primaryCards = screen.getByRole('navigation', { name: 'Primary record sections' });
+    await user.click(within(primaryCards).getByRole('button', { name: /Racing/i }));
+    await user.click(screen.getAllByRole('button', { name: /Setups/i })[0]);
+
+    expect(screen.getByRole('region', { name: 'Published racing setups' })).toBeInTheDocument();
+    expect(screen.getByText('ACC 차량 셋업')).toBeInTheDocument();
+  });
+
+  it('shows the racing setup guide and tuning recommendations', async () => {
+    const user = userEvent.setup();
+    render(<App />);
+
+    const primaryCards = screen.getByRole('navigation', { name: 'Primary record sections' });
+    await user.click(within(primaryCards).getByRole('button', { name: /Racing/i }));
+
+    const guide = screen.getByRole('region', { name: 'Racing setup and tuning guide' });
+    expect(within(guide).getByText('레이스 후 차량 피드백 → 튜닝 가이드')).toBeInTheDocument();
+    expect(within(guide).getByText(/복수 선택 가능/)).toBeInTheDocument();
+    expect(within(guide).getAllByRole('button')).toHaveLength(20);
+
+    await user.click(within(guide).getByRole('button', { name: /코너 탈출 시 오버스티어/i }));
+
+    expect(within(guide).getByText('TC1')).toBeInTheDocument();
+    expect(within(guide).getByText(/TC1 단계 \+1~2/)).toBeInTheDocument();
+  });
+
   it('opens a real record from the random discovery prompt', async () => {
     const user = userEvent.setup();
     render(<App />);
 
     await user.click(screen.getByRole('button', { name: /random/i }));
 
-    expect(screen.getByRole('heading', { name: '첫 화면의 무드 보드' })).toBeInTheDocument();
-    expect(screen.getByText(/설명보다 분위기로 기억되게 둔다/)).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: '남겨둔 장면들' })).toBeInTheDocument();
+    expect(screen.getByText(/잘 찍은 사진만 올리는 공간은 아니다/)).toBeInTheDocument();
   });
 
   it('supports browser back navigation between in-memory views', async () => {
@@ -199,5 +229,17 @@ describe('Karmurs Record homepage', () => {
         screen.getByRole('heading', { name: /Things worth keeping in my record/i })
       ).toBeInTheDocument();
     });
+  });
+
+  it('opens the protected admin shell from the /admin path', () => {
+    window.history.replaceState(null, '', '/admin');
+
+    render(<App />);
+
+    expect(screen.getByRole('heading', { name: 'Admin login' })).toBeInTheDocument();
+    expect(
+      screen.queryByText(/Supabase env is not configured/i) ??
+        screen.getByRole('button', { name: /Sign in/i })
+    ).toBeInTheDocument();
   });
 });

@@ -22,12 +22,17 @@ Open the preview URL and confirm the homepage, section cards, archive, and detai
 ## GitHub Pages
 
 1. Create a GitHub repository named `karmurs-record` under `karmurs`.
-2. Push this project to the repository.
-3. In GitHub, open `Settings > Pages`.
-4. Set the source to `GitHub Actions`.
-5. Push to `main`.
+2. In GitHub, open `Settings > Secrets and variables > Actions`.
+3. Add repository variable `VITE_SUPABASE_URL` with the project base URL, for example `https://PROJECT_REF.supabase.co`.
+4. Add repository secret `VITE_SUPABASE_ANON_KEY` with the Supabase publishable/anon key.
+5. Open `Settings > Pages`.
+6. Set the source to `GitHub Actions`.
+7. Push this project to `main`.
 
 The workflow at `.github/workflows/deploy.yml` will build the site and publish `dist/`.
+It intentionally fails before build if the Supabase values are missing, so the deployed site does not silently lose public records, images, or admin connectivity.
+
+Do not add `CODEX_DEVLOG_ADMIN_EMAIL` or `CODEX_DEVLOG_ADMIN_PASSWORD` to the Pages workflow. Those values are only for the local daily Devlog draft uploader or a separate trusted automation, never for the public frontend build.
 
 ## Netlify
 

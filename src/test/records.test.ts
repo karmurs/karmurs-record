@@ -23,10 +23,10 @@ describe('records seed data', () => {
 
   it('uses public-safe seed records for the four primary sections', () => {
     expect(records.map((record) => record.title)).toEqual([
-      "Karmurs' Record를 여는 기준",
-      '첫 화면의 무드 보드',
-      'Racing 기록장의 첫 구조',
-      'Devlog를 메인에 남긴 이유'
+      '기록을 남기는 방식',
+      '남겨둔 장면들',
+      '랩타임 노트',
+      '업데이트 기록'
     ]);
   });
 });

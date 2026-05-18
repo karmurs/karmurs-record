@@ -8,6 +8,7 @@ export type RecordType =
   | 'note';
 
 export type RecordVisibility = 'link' | 'private';
+export type RecordAdminVisibility = 'public' | 'private' | 'draft';
 
 export type RecordEntry = {
   id: string;
@@ -18,9 +19,12 @@ export type RecordEntry = {
   body: string;
   tags: string[];
   visibility: RecordVisibility;
+  adminVisibility?: RecordAdminVisibility;
   createdAt: string;
   updatedAt: string;
   imageTone?: 'warm' | 'mono' | 'racing' | 'dev';
+  coverImageUrl?: string;
+  coverImageAlt?: string;
   lapTime?: string;
   racingTrack?: string;
   racingCar?: string;
@@ -58,12 +62,12 @@ export const publicRecordTypes = ['journal', 'gallery', 'racing', 'devlog'] as c
 export const records: RecordEntry[] = [
   {
     id: 'journal-hello-record',
-    title: "Karmurs' Record를 여는 기준",
+    title: '기록을 남기는 방식',
     type: 'journal',
     date: '2026-05-16',
-    summary: '흘려보내기 아까운 글과 기억을 다시 꺼내기 쉬운 형태로 모아두기로 했다.',
-    body: "Karmurs' Record는 완성된 블로그보다 개인 기록실에 가깝다. 짧은 생각, 오래 보고 싶은 문장, 나중에 다시 이어 쓸 메모를 공개해도 괜찮은 범위 안에서 차분히 쌓아간다.",
-    tags: ['journal', 'record'],
+    summary: '짧게 적고, 오래 남기고, 나중에 다시 꺼내기 쉬운 형태로 쌓아둔다.',
+    body: '완성된 글만 모으기보다 지금의 생각을 너무 무겁지 않게 남긴다. 일기, 메모, 마음에 남은 문장처럼 다시 돌아볼 이유가 있는 것들을 공개해도 괜찮은 범위 안에서 천천히 정리한다.',
+    tags: ['journal', 'note'],
     visibility: 'link',
     createdAt: '2026-05-16T06:00:00+09:00',
     updatedAt: '2026-05-16T06:00:00+09:00',
@@ -71,12 +75,12 @@ export const records: RecordEntry[] = [
   },
   {
     id: 'gallery-first-mood',
-    title: '첫 화면의 무드 보드',
+    title: '남겨둔 장면들',
     type: 'gallery',
     date: '2026-05-16',
-    summary: '다크 에디토리얼 배경 위에 손글씨 문구와 큰 카드 입구를 올린 첫 방향.',
-    body: '첫 화면은 설명보다 분위기로 기억되게 둔다. 검은 배경, 아이보리 톤, 따뜻한 브라운 포인트를 쓰고 Journal, Gallery, Racing, Devlog 카드가 각각 다른 기록실로 이어지게 만든다.',
-    tags: ['gallery', 'mood', 'homepage'],
+    summary: '사진, 캡처, 분위기처럼 말보다 먼저 떠오르는 조각들을 모아둔다.',
+    body: '잘 찍은 사진만 올리는 공간은 아니다. 특정 날의 공기, 게임 속 장면, 작업 중 남은 화면처럼 나중에 다시 보면 바로 그때가 떠오르는 이미지를 차분히 보관한다.',
+    tags: ['gallery', 'scene', 'archive'],
     visibility: 'link',
     createdAt: '2026-05-16T06:05:00+09:00',
     updatedAt: '2026-05-16T06:05:00+09:00',
@@ -84,12 +88,12 @@ export const records: RecordEntry[] = [
   },
   {
     id: 'racing-first-card',
-    title: 'Racing 기록장의 첫 구조',
+    title: '랩타임 노트',
     type: 'racing',
     date: '2026-05-16',
-    summary: '랩타임, 세션, 트랙, 차량 메모를 한곳에서 훑어볼 수 있는 입구를 만들었다.',
-    body: 'Racing은 개인 기록 중 별도의 축으로 남긴다. 현재 seed 기록은 구조를 보여주는 공개용 예시이며, 실제 랩타임이나 세션 데이터는 검증된 값만 나중에 교체해서 넣는다.',
-    tags: ['racing', 'session', 'archive'],
+    summary: '트랙, 차량, 세션별 기록을 한곳에서 비교할 수 있게 정리한다.',
+    body: 'ACC, ACE, LMU에서 남긴 랩타임과 세션 기록을 따로 흩어두지 않고 같은 흐름으로 본다. 빠른 기록뿐 아니라 어떤 차량과 조건에서 나온 기록인지까지 함께 남기는 쪽을 기준으로 삼는다.',
+    tags: ['racing', 'lap-time', 'setup'],
     visibility: 'link',
     createdAt: '2026-05-16T06:10:00+09:00',
     updatedAt: '2026-05-16T06:10:00+09:00',
@@ -100,12 +104,12 @@ export const records: RecordEntry[] = [
   },
   {
     id: 'devlog-first-note',
-    title: 'Devlog를 메인에 남긴 이유',
+    title: '업데이트 기록',
     type: 'devlog',
     date: '2026-05-16',
-    summary: '이 홈페이지가 계속 만들어지는 프로젝트라는 사실도 기록의 일부로 남긴다.',
-    body: 'Devlog는 임시 카드가 아니라 네 번째 메인 섹션이다. 디자인 조정, 배포 준비, 기능 아이디어, 개인 도구를 만들며 배운 점을 공개 가능한 범위에서 짧게 기록한다.',
-    tags: ['devlog', 'homepage', 'decision'],
+    summary: '홈페이지가 어떻게 바뀌고 있는지 공개해도 되는 범위에서 남긴다.',
+    body: '기능을 붙이고, 디자인을 다듬고, 자동화를 정리한 과정을 하루 단위로 요약한다. 내부 설정이나 민감한 값은 제외하고, 나중에 봐도 흐름을 이해할 수 있는 업데이트 내역만 남긴다.',
+    tags: ['devlog', 'update', 'homepage'],
     visibility: 'link',
     createdAt: '2026-05-16T08:50:00+09:00',
     updatedAt: '2026-05-16T08:50:00+09:00',

@@ -1,7 +1,8 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import {
   brandFallbacks,
   brandLogoPaths,
+  getTrackDisplayName,
   racingCarCatalog,
   racingTrackCatalog
 } from '../data/racingCatalog';
@@ -21,6 +22,20 @@ import {
   type RacingMenuId,
   type SessionType
 } from '../data/racingRecords';
+import type { RacingSetup } from '../data/racingSetups';
+import RacingSetupsPanel from './RacingSetupsPanel';
+
+type RacingExplorerProps = {
+  adminUserId?: string;
+  focusSetupPage?: {
+    focusNewest: boolean;
+    game: RacingGameId;
+    nonce: number;
+  } | null;
+  onRacingSetupsChanged?: () => void | Promise<void>;
+  racingSetups: RacingSetup[];
+  racingSetupsError: string | null;
+};
 
 const sessionTypeLabels: SessionType[] = ['Practice', 'Qualifying', 'Race', 'Hotlap', 'Test'];
 
@@ -54,7 +69,13 @@ const getTrackPath = (track: string) => {
   return fallbackTrackPaths[index];
 };
 
-export default function RacingExplorer() {
+export default function RacingExplorer({
+  adminUserId,
+  focusSetupPage,
+  onRacingSetupsChanged,
+  racingSetups,
+  racingSetupsError
+}: RacingExplorerProps) {
   const [selectedGameId, setSelectedGameId] = useState<RacingGameId>('acc');
   const [selectedMenuId, setSelectedMenuId] = useState<RacingMenuId>('sessions');
   const [selectedSessionType, setSelectedSessionType] = useState<'All' | SessionType>('All');
@@ -70,6 +91,7 @@ export default function RacingExplorer() {
     [gameSessions, selectedSessionType]
   );
   const selectedMenu = selectedGame.menus.find((menu) => menu.id === selectedMenuId);
+  const selectedGameSetups = racingSetups.filter((setup) => setup.game === selectedGame.id);
   const previewSession = visibleSessions[0];
   const catalogTracks = racingTrackCatalog.filter((track) => track.gameId === selectedGame.id);
   const catalogCars = racingCarCatalog.filter((car) => car.gameId === selectedGame.id);
@@ -115,6 +137,16 @@ export default function RacingExplorer() {
     })
     .join(' ');
 
+  useEffect(() => {
+    if (!focusSetupPage) {
+      return;
+    }
+
+    setSelectedGameId(focusSetupPage.game);
+    setSelectedMenuId('setups');
+    setSelectedImportedTrack('All');
+  }, [focusSetupPage]);
+
   return (
     <section className="racing-explorer" aria-label="Racing records explorer">
       <aside className="racing-sidebar" aria-label="Racing games and folders">
@@ -154,7 +186,11 @@ export default function RacingExplorer() {
                     type="button"
                   >
                     <span>{menu.label}</span>
-                    <small>{menu.count}</small>
+                    <small>
+                      {menu.id === 'setups'
+                        ? racingSetups.filter((setup) => setup.game === game.id).length
+                        : menu.count}
+                    </small>
                   </button>
                 ))}
               </div>
@@ -210,6 +246,8 @@ export default function RacingExplorer() {
                 ? catalogTracks.length
                 : selectedMenuId === 'cars'
                   ? catalogCars.length
+                  : selectedMenuId === 'setups'
+                    ? selectedGameSetups.length
                   : hasImportedLaps
                     ? importedSummary.lapCount
                     : gameSessions.length}
@@ -219,6 +257,8 @@ export default function RacingExplorer() {
                 ? 'tracks'
                 : selectedMenuId === 'cars'
                   ? 'cars'
+                  : selectedMenuId === 'setups'
+                    ? 'setups'
                   : hasImportedLaps
                     ? 'imported laps'
                     : 'saved sessions'}
@@ -390,7 +430,11 @@ export default function RacingExplorer() {
         {selectedMenuId === 'tracks' ? (
           <div className="catalog-grid" role="list" aria-label={`${selectedGame.title} implemented tracks`}>
             {catalogTracks.map((track) => (
-              <div className="catalog-row" role="listitem" key={`${track.gameId}-${track.name}`}>
+              <div
+                className="catalog-row"
+                role="listitem"
+                key={`${track.gameId}-${track.name}-${track.layout ?? 'default'}`}
+              >
                 <span
                   aria-label={`${track.name} layout`}
                   className={`track-layout-mini racing-accent-${selectedGame.accent} track-${getTrackClass(track.name)}`}
@@ -401,8 +445,8 @@ export default function RacingExplorer() {
                   </svg>
                 </span>
                 <div>
-                  <strong>{track.name}</strong>
-                  <span>{track.layouts ?? track.source}</span>
+                  <strong>{getTrackDisplayName(track)}</strong>
+                  <span>{track.source}</span>
                 </div>
               </div>
             ))}
@@ -431,6 +475,21 @@ export default function RacingExplorer() {
               </div>
             ))}
           </div>
+        ) : null}
+
+        {selectedMenuId === 'setups' ? (
+          <RacingSetupsPanel
+            adminUserId={adminUserId}
+            error={racingSetupsError}
+            focusNewestNonce={
+              focusSetupPage?.focusNewest && focusSetupPage.game === selectedGame.id
+                ? focusSetupPage.nonce
+                : undefined
+            }
+            gameTitle={selectedGame.shortTitle}
+            onChanged={onRacingSetupsChanged}
+            setups={selectedGameSetups}
+          />
         ) : null}
 
         {selectedMenuId === 'sessions' ? (
